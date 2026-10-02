@@ -1,0 +1,14 @@
+# 로컬 개발 환경과 임시 산출물
+.DS_Store
+._*
+Library/
+Temp/
+Obj/
+Logs/
+UserSettings/
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+
+# 배포용 Runtime/Plugins 바이너리, Upstream~ 사본, .meta는 추적한다.

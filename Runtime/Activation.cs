@@ -1,0 +1,11 @@
+// Copyright (c) Amer Koleci and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the package root.
+
+namespace JoltPhysicsSharp
+{
+    public enum Activation
+    {
+        Activate = 0,
+        DontActivate = 1
+    }
+}

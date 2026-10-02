@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "managed": {
+    "repository": "https://github.com/amerkoleci/JoltPhysicsSharp",
+    "version": "2.22.0",
+    "commit": "77a5be2dd30d587c1981dfcaf15851f18041b39c",
+    "sourceArchive": "Upstream~/JoltPhysicsSharp-2.22.0.tar.gz",
+    "sourceArchiveSha256": "3f91221bdc89c569ed4c5b5b2cd45411485499a0a6b8ad9b7a38ecd3338d8a71",
+    "sourceFileCount": 183,
+    "csharpFileCount": 177,
+    "originalTargetFrameworks": [
+      "net9.0",
+      "net10.0"
+    ],
+    "originalLanguageVersion": "14.0"
+  },
+  "native": {
+    "dependencyName": "JoltPhysics.Native",
+    "dependencyVersion": "1.1.0",
+    "repository": "https://github.com/amerkoleci/joltc",
+    "sourceCommit": "886e088675bae3a086f8318c7803f8ee962c2f2c",
+    "artifacts": [
+      {
+        "path": "Runtime/Plugins/macOS/libjoltc.dylib",
+        "sha256": "fea99b696c83f39671f7e2df6ee27ffe9388763b6f78d7a6b718f7dc824fb460",
+        "platform": "macOS",
+        "architectures": [
+          "arm64",
+          "x86_64"
+        ],
+        "minimumOSVersion": "11.0",
+        "precision": "single",
+        "objectLayerBits": 32
+      }
+    ],
+    "status": "macos-editor-arm64-box-and-compound-validated",
+    "sourceArchive": "Upstream~/joltc-886e088.tar.gz",
+    "sourceArchiveSha256": "35bae264fdb7d0b10eff401b5e0dca292bd9b0c98143c1b77294b93703e6b657",
+    "engine": {
+      "repository": "https://github.com/jrouwe/JoltPhysics",
+      "version": "5.6.0",
+      "commit": "e77f175595e64cb44218cc9d9d56fc365ad0e36a"
+    },
+    "build": {
+      "date": "2026-10-01",
+      "compiler": "Apple clang 21.0.0 (clang-2100.3.34.2)",
+      "cmakeVersion": "4.0.3",
+      "objectLayerBits": 32,
+      "cmakeOptions": {
+        "CMAKE_BUILD_TYPE": "Distribution",
+        "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "JPH_BUILD_SHARED": "ON",
+        "JPH_SAMPLES": "OFF",
+        "JPH_TESTS": "OFF",
+        "DOUBLE_PRECISION": "OFF",
+        "CROSS_PLATFORM_DETERMINISTIC": "ON",
+        "INTERPROCEDURAL_OPTIMIZATION": "OFF",
+        "USE_ASSERTS": "OFF",
+        "USE_AVX": "OFF",
+        "USE_AVX2": "OFF",
+        "USE_AVX512": "OFF",
+        "USE_SSE4_1": "OFF",
+        "USE_SSE4_2": "OFF",
+        "USE_LZCNT": "OFF",
+        "USE_TZCNT": "OFF",
+        "USE_F16C": "OFF",
+        "USE_FMADD": "OFF"
+      }
+    }
+  },
+  "unityPort": {
+    "targetEditor": "6000.4.8f1",
+    "apiProfile": ".NET Standard 2.1",
+    "languageVersion": "9.0",
+    "namespace": "JoltPhysicsSharp",
+    "assemblyName": "JoltPhysicsSharp.Unity",
+    "vectorType": "UnityEngine.Vector3",
+    "quaternionType": "UnityEngine.Quaternion",
+    "matrixType": "UnityEngine.Matrix4x4",
+    "precision": "single",
+    "stage": "native-world-body-preview",
+    "validation": {
+      "editorVersion": "6000.4.8f1",
+      "platform": "macOS",
+      "architecture": "arm64",
+      "upmImport": "passed",
+      "sample": "DataWorld/BoxSimulation",
+      "sampleSteps": 120,
+      "boxAndCompoundSimulation": "passed",
+      "nativeResourceCleanup": "passed",
+      "playerBuild": "not-run",
+      "il2cpp": "not-run",
+      "x86_64Execution": "not-run",
+      "performance": "not-measured"
+    }
+  }
+}

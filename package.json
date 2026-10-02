@@ -1,0 +1,29 @@
+{
+  "name": "com.ciart.joltphysics",
+  "version": "0.1.0-preview.1",
+  "displayName": "JoltPhysicsSharp for Unity",
+  "description": "UnityEngine 수학 타입으로 월드, Box·Compound 바디와 고정 스텝을 제공하는 JoltPhysicsSharp 이식 패키지.",
+  "unity": "6000.4",
+  "author": {
+    "name": "Ciart"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ciart/JoltPhysicsUnity.git"
+  },
+  "keywords": [
+    "physics",
+    "jolt",
+    "native",
+    "3d"
+  ],
+  "dependencies": {},
+  "samples": [
+    {
+      "displayName": "Data World",
+      "description": "씬 없이 상자와 바닥을 생성하고 고정 스텝을 실행합니다.",
+      "path": "Samples~/DataWorld"
+    }
+  ]
+}

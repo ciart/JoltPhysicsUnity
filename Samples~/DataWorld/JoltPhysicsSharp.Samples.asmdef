@@ -1,0 +1,7 @@
+{
+  "name": "JoltPhysicsSharp.Samples",
+  "rootNamespace": "JoltPhysicsSharp.Samples",
+  "references": ["JoltPhysicsSharp.Unity"],
+  "autoReferenced": true,
+  "noEngineReferences": false
+}
