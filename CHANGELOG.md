@@ -18,5 +18,6 @@
 - `ciart/JoltPhysicsUnity` 독립 Git 저장소의 루트에서 설치할 수 있도록 저장소 메타데이터와 Git URL 설치 안내를 추가했다.
 - 사용자의 요청에 따라 저장소를 공개로 전환하고 GitHub 인증 없이 설치하는 안내로 갱신했다.
 - README를 설치·샘플·구현 범위·실행 확인 환경 중심으로 정리하고, OpenAI GPT(Codex)가 Unity 포팅을 수행했음을 명시했다.
+- 영문을 기본 `README.md`로 제공하고 한국어 문서를 `README.ko.md`로 이동했다. 언어 간 링크와 GPT 포팅 표기, 구현·실행 확인 범위를 함께 유지한다.
 
 쿼리·접촉 이벤트, Windows 및 IL2CPP 지원은 아직 완료하지 않았다. 세부 차이와 검증 범위는 `Documentation~/UpstreamChanges.md`에 기록한다.
