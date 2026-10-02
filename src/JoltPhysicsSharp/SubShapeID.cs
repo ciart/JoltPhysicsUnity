@@ -1,11 +1,21 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly partial struct SubShapeID(uint value) : IComparable, IComparable<SubShapeID>, IEquatable<SubShapeID>, IFormattable
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public readonly uint Value = value;
+
+public readonly partial struct SubShapeID : IComparable, IComparable<SubShapeID>, IEquatable<SubShapeID>, IFormattable
+{
+    public SubShapeID(uint value)
+    {
+        Value = value;
+    }
+
+    public readonly uint Value;
 
     public static bool operator ==(SubShapeID left, SubShapeID right) => left.Value == right.Value;
 
@@ -45,4 +55,5 @@ public readonly partial struct SubShapeID(uint value) : IComparable, IComparable
     public override string ToString() => Value.ToString();
 
     public string ToString(string? format, IFormatProvider? formatProvider) => Value.ToString(format, formatProvider);
+}
 }

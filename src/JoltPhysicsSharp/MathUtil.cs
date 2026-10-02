@@ -1,10 +1,19 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable enable
+
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
 using System.Numerics;
+#endif
 using System.Runtime.CompilerServices;
 
-namespace JoltPhysicsSharp;
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public static class MathUtil
 {
@@ -26,6 +35,18 @@ public static class MathUtil
 
     public static Vector3 GetNormalizedPerpendicular(this Vector3 vector)
     {
+#if UNITY_5_3_OR_NEWER
+        if (MathF.Abs(vector.x) > MathF.Abs(vector.y))
+        {
+            float len = MathF.Sqrt(vector.x * vector.x + vector.z * vector.z);
+            return new(vector.z / len, 0.0f, -vector.x / len);
+        }
+        else
+        {
+            float len = MathF.Sqrt(vector.y * vector.y + vector.z * vector.z);
+            return new(0.0f, vector.z / len, -vector.y / len);
+        }
+#else
         if (MathF.Abs(vector.X) > MathF.Abs(vector.Y))
         {
             float len = MathF.Sqrt(vector.X * vector.X + vector.Z * vector.Z);
@@ -36,5 +57,7 @@ public static class MathUtil
             float len = MathF.Sqrt(vector.Y * vector.Y + vector.Z * vector.Z);
             return new(0.0f, vector.Z / len, -vector.Y / len);
         }
+#endif
     }
+}
 }

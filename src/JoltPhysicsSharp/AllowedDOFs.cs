@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Enum used in <see cref="BodyCreationSettings"/> and <see cref="MotionProperties"/> to indicate which degrees of freedom a body has.
@@ -41,4 +46,5 @@ public enum AllowedDOFs
     /// Body can only move in X and Y axis and rotate around Z axis
     /// </summary>
 	Plane2D = TranslationX | TranslationY | RotationZ,
+}
 }

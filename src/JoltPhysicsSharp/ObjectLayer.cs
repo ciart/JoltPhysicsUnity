@@ -3,17 +3,27 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly struct ObjectLayer(uint value) : IEquatable<ObjectLayer>
+using System;
+
+namespace JoltPhysicsSharp
 {
+
+public readonly struct ObjectLayer : IEquatable<ObjectLayer>
+{
+    public ObjectLayer(uint value)
+    {
+        Value = value;
+    }
+
     public const int Bits = 32; // Must be updated according to JPH_OBJECT_LAYER_BITS
 
     /// <summary>
     /// Constant value used to indicate an invalid object layer
     /// </summary>
     public const uint ObjectLayerInvalid = ~0U;
-    public uint Value { get; } = value;
+    public uint Value { get; }
     public bool IsValid => Value != ObjectLayerInvalid;
     public bool IsInvalid => Value == ObjectLayerInvalid;
 
@@ -35,4 +45,5 @@ public readonly struct ObjectLayer(uint value) : IEquatable<ObjectLayer>
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value.ToString();
+}
 }

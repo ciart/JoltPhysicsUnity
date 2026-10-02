@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public readonly struct SubShapeIDPair
 {
@@ -9,4 +14,5 @@ public readonly struct SubShapeIDPair
     public readonly uint SubShapeID1;
     public readonly BodyID Body2ID;
     public readonly uint SubShapeID2;
+}
 }

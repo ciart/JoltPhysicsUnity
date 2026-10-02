@@ -1,9 +1,18 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
 using System.Numerics;
+#endif
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public readonly struct Triangle : IEquatable<Triangle>
 {
@@ -22,12 +31,12 @@ public readonly struct Triangle : IEquatable<Triangle>
 
     public static bool operator ==(Triangle left, Triangle right)
     {
-        return left.V1 == right.V1 && left.V2 == right.V2 && left.V3 == right.V3 && left.MaterialIndex == right.MaterialIndex;
+        return left.V1.Equals(right.V1) && left.V2.Equals(right.V2) && left.V3.Equals(right.V3) && left.MaterialIndex == right.MaterialIndex;
     }
 
     public static bool operator !=(Triangle left, Triangle right)
     {
-        return left.V1 != right.V1 || left.V2 != right.V2 || left.V3 != right.V3 || left.MaterialIndex != right.MaterialIndex;
+        return !(left == right);
     }
 
     public bool Equals(Triangle other) => this == other;
@@ -39,4 +48,5 @@ public readonly struct Triangle : IEquatable<Triangle>
     public override int GetHashCode() => HashCode.Combine(V1, V2, V3, MaterialIndex);
 
     public override string ToString() => $"V1: {V1}, V2: {V2}, V3: {V3}, MaterialIndex: {MaterialIndex}";
+}
 }

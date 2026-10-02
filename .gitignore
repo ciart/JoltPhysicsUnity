@@ -267,3 +267,7 @@ artifacts/
 artifacts-*/
 
 build/*
+
+# Unity port documents use Unity's hidden-folder convention.
+!Unity~/
+!Unity~/**

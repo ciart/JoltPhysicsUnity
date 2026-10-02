@@ -1,9 +1,18 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-using System.Numerics;
+#nullable enable
 
-namespace JoltPhysicsSharp;
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
+using System.Numerics;
+#endif
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public readonly struct ShapeCastResult
 {
@@ -16,4 +25,5 @@ public readonly struct ShapeCastResult
     public readonly BodyID BodyID2;
     public readonly float Fraction;
     public readonly Bool8 IsBackFaceHit;
+}
 }

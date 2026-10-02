@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public readonly struct IndexedTriangleNoMaterial : IEquatable<IndexedTriangleNoMaterial>
 {
@@ -35,4 +40,5 @@ public readonly struct IndexedTriangleNoMaterial : IEquatable<IndexedTriangleNoM
     public override int GetHashCode() => HashCode.Combine(I1, I2, I3);
 
     public override string ToString() => $"I1: {I1}, I2: {I2}, I3: {I3}";
+}
 }

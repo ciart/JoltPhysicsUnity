@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public enum ValidateResult
 {
@@ -21,4 +26,5 @@ public enum ValidateResult
     /// Rejects this and any further contact points for this body pair
     /// </summary>
 	RejectAllContactsForThisBodyPair
+}
 }

@@ -1,7 +1,12 @@
-﻿// Copyright (c) Amer Koleci and Contributors.
+// Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public enum GroundState
 {
@@ -9,4 +14,5 @@ public enum GroundState
     OnSteepGround = 1,
     NotSupported = 2,
     InAir = 3
+}
 }

@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Defines the subtype of <see cref="Constraint"/>
@@ -26,4 +31,5 @@ public enum ConstraintSubType
     User2 = 14,
     User3 = 15,
     User4 = 16,
+}
 }

@@ -1,11 +1,21 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly struct BroadPhaseLayer(byte value) : IEquatable<BroadPhaseLayer>
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public byte Value { get; } = value;
+
+public readonly struct BroadPhaseLayer : IEquatable<BroadPhaseLayer>
+{
+    public BroadPhaseLayer(byte value)
+    {
+        Value = value;
+    }
+
+    public byte Value { get; }
 
     public static implicit operator BroadPhaseLayer(byte id) => new(id);
     public static implicit operator byte(in BroadPhaseLayer id) => id.Value;
@@ -23,4 +33,5 @@ public readonly struct BroadPhaseLayer(byte value) : IEquatable<BroadPhaseLayer>
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value.ToString();
+}
 }

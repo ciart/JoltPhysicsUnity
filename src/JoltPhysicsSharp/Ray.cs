@@ -1,11 +1,20 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable enable
+
 using System.Diagnostics.CodeAnalysis;
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
 using System.Numerics;
+#endif
 using System.Runtime.CompilerServices;
 
-namespace JoltPhysicsSharp;
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Defines a ray.
@@ -20,7 +29,7 @@ public struct Ray
     public Vector3 Position;
 
     /// <summary>
-    /// The normalized direction in which the ray points.
+    /// The displacement vector of the ray; its magnitude is the cast length.
     /// </summary>
     public Vector3 Direction;
 
@@ -28,7 +37,7 @@ public struct Ray
     /// Initializes a new instance of the <see cref="Ray"/> struct.
     /// </summary>
     /// <param name="position">The position in three dimensional space of the origin of the ray.</param>
-    /// <param name="direction">The normalized direction of the ray.</param>
+    /// <param name="direction">The displacement vector of the ray, including its cast length.</param>
     public Ray(in Vector3 position, in Vector3 direction)
     {
         Position = position;
@@ -62,8 +71,13 @@ public struct Ray
     /// <returns></returns>
 	public static Ray Transform(in Ray ray, in Matrix4x4 transform)
     {
+#if UNITY_5_3_OR_NEWER
+        Vector3 rayOrigin = transform.MultiplyPoint3x4(ray.Position);
+        Vector3 rayDirection = transform.MultiplyPoint3x4(ray.Position + ray.Direction) - rayOrigin;
+#else
         Vector3 rayOrigin = Vector3.Transform(ray.Position, transform);
         Vector3 rayDirection = Vector3.Transform(ray.Position + ray.Direction, transform) - rayOrigin;
+#endif
         return new(rayOrigin, rayDirection);
     }
 
@@ -121,4 +135,5 @@ public struct Ray
     {
         return $"Position:{Position.ToString(format, formatProvider)} Direction:{Direction.ToString(format, formatProvider)}";
     }
+}
 }

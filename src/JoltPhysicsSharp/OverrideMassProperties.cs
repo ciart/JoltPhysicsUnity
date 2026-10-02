@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Enum used in <see cref="BodyCreationSettings"/> to indicate how mass and inertia should be calculated.
@@ -20,4 +25,5 @@ public enum OverrideMassProperties
     /// Tells the system to take the mass and inertia from <see cref="BodyCreationSettings.MassPropertiesOverride"/>
     /// </summary>
 	MassAndInertiaProvided
+}
 }

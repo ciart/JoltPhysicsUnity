@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "managed": {
+    "repository": "https://github.com/amerkoleci/JoltPhysicsSharp",
+    "forkRepositoryAtStart": "https://github.com/peudomi/JoltPhysicsSharp",
+    "commit": "3ab66bf9e970b10c2b22b8f5b88dfdc2c765a7fb",
+    "version": "2.22.0",
+    "csharpFileCount": 177,
+    "sourceDirectory": "src/JoltPhysicsSharp"
+  },
+  "unityPort": {
+    "displayName": "JoltPhysicsUnity",
+    "plannedPackageId": "com.ciart.joltphysics",
+    "namespace": "JoltPhysicsSharp",
+    "editorBaseline": "6000.4.8f1",
+    "apiProfile": ".NET Standard 2.1",
+    "languageVersion": "9.0",
+    "precisionFirstMilestone": "single",
+    "stage": "source-port-in-progress",
+    "nativeExecutionValidated": false,
+    "upmInstallValidated": false,
+    "compiledOriginalFiles": 48
+  },
+  "nativeReference": {
+    "repository": "https://github.com/amerkoleci/joltc",
+    "commit": "886e088675bae3a086f8318c7803f8ee962c2f2c",
+    "header": "include/joltc.h",
+    "headerSha256": "5b6e2ca74170bb0c7760463e965f9958691a15bbf7b80ffd005886c9895759a7",
+    "dependencyVersion": "1.1.0",
+    "engineVersion": "5.6.0",
+    "artifactsAddedInThisFork": false
+  }
+}

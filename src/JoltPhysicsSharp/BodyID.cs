@@ -1,10 +1,20 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly struct BodyID(uint id) : IEquatable<BodyID>
+using System;
+
+namespace JoltPhysicsSharp
 {
+
+public readonly struct BodyID : IEquatable<BodyID>
+{
+    public BodyID(uint id)
+    {
+        ID = id;
+    }
+
     /// <summary>
     /// The value for an invalid body ID
     /// </summary>
@@ -25,7 +35,7 @@ public readonly struct BodyID(uint id) : IEquatable<BodyID>
     /// </summary>
 	public const byte MaxSequenceNumber = 0xff;
 
-    public uint ID { get; } = id;
+    public uint ID { get; }
     public bool IsValid => ID != InvalidBodyID;
     public bool IsInvalid => ID == InvalidBodyID;
 
@@ -62,4 +72,5 @@ public readonly struct BodyID(uint id) : IEquatable<BodyID>
     public override int GetHashCode() => ID.GetHashCode();
 
     public override string ToString() => ID.ToString();
+}
 }

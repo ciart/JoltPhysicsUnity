@@ -1,14 +1,22 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-using System.Numerics;
-using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly partial struct Bool32(uint value) : IComparable, IComparable<Bool32>, IEquatable<Bool32>
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public readonly uint Value = value;
+
+public readonly partial struct Bool32 : IComparable, IComparable<Bool32>, IEquatable<Bool32>
+{
+    public Bool32(uint value)
+    {
+        Value = value;
+    }
+
+    public readonly uint Value;
 
     public static Bool32 True => new(1);
     public static Bool32 False => new(0);
@@ -54,4 +62,5 @@ public readonly partial struct Bool32(uint value) : IComparable, IComparable<Boo
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value != 0 ? "True" : "False";
+}
 }

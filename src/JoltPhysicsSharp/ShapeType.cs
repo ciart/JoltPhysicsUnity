@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Shapes are categorized in groups, each shape can return which group it belongs to through its <see cref="Shape.Type"/> function.
@@ -49,4 +54,5 @@ public enum ShapeType
     /// User defined shape 4
     /// </summary>
     User4,
+}
 }

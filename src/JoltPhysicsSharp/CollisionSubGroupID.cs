@@ -3,11 +3,21 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly partial struct CollisionSubGroupID(uint value) : IComparable, IComparable<CollisionSubGroupID>, IEquatable<CollisionSubGroupID>, IFormattable
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public readonly uint Value = value;
+
+public readonly partial struct CollisionSubGroupID : IComparable, IComparable<CollisionSubGroupID>, IEquatable<CollisionSubGroupID>, IFormattable
+{
+    public CollisionSubGroupID(uint value)
+    {
+        Value = value;
+    }
+
+    public readonly uint Value;
 
     public static CollisionSubGroupID Invalid => new(~0U);
 
@@ -49,4 +59,5 @@ public readonly partial struct CollisionSubGroupID(uint value) : IComparable, IC
     public override string ToString() => Value.ToString();
 
     public string ToString(string? format, IFormatProvider? formatProvider) => Value.ToString(format, formatProvider);
+}
 }

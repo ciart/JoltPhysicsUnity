@@ -3,11 +3,21 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly partial struct CharacterID(uint value) : IComparable, IComparable<CharacterID>, IEquatable<CharacterID>, IFormattable
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public readonly uint Value = value;
+
+public readonly partial struct CharacterID : IComparable, IComparable<CharacterID>, IEquatable<CharacterID>, IFormattable
+{
+    public CharacterID(uint value)
+    {
+        Value = value;
+    }
+
+    public readonly uint Value;
 
     public static bool operator ==(CharacterID left, CharacterID right) => left.Value == right.Value;
 
@@ -47,4 +57,5 @@ public readonly partial struct CharacterID(uint value) : IComparable, IComparabl
     public override string ToString() => Value.ToString();
 
     public string ToString(string? format, IFormatProvider? formatProvider) => Value.ToString(format, formatProvider);
+}
 }

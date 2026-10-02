@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Defines how to color soft body constraints
@@ -20,4 +25,5 @@ public enum SoftBodyConstraintColor
     /// Draw constraints in the same group in the same color, non-parallel group will be red, and order within each group will be indicated with gradient
     /// </summary>
     ConstraintOrder,
+}
 }

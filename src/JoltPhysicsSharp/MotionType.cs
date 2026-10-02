@@ -1,7 +1,8 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Motion type of a physics body
@@ -20,4 +21,5 @@ public enum MotionType
     /// Responds to forces as a normal physics object
     /// </summary>
     Dynamic = 2
+}
 }

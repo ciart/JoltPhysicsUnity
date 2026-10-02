@@ -1,11 +1,21 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
 
-public readonly partial struct Bool8(byte value) : IComparable, IComparable<Bool8>, IEquatable<Bool8>
+using System;
+
+namespace JoltPhysicsSharp
 {
-    public readonly byte Value = value;
+
+public readonly partial struct Bool8 : IComparable, IComparable<Bool8>, IEquatable<Bool8>
+{
+    public Bool8(byte value)
+    {
+        Value = value;
+    }
+
+    public readonly byte Value;
 
     public static Bool8 True => new(1);
     public static Bool8 False => new(0);
@@ -51,4 +61,5 @@ public readonly partial struct Bool8(byte value) : IComparable, IComparable<Bool
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value != 0 ? "True" : "False";
+}
 }

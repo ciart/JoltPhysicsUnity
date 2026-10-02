@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Motion quality, or how well it detects collisions when it has a high velocity
@@ -29,4 +34,5 @@ public enum MotionQuality
 	/// point added callback between A and B (which will be removed the next frame).
     /// </summary>
     LinearCast = 1,
+}
 }

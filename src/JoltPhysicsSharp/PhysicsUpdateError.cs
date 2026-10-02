@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Enum used by <see cref="PhysicsSystem"/> to report error conditions during the <see cref="PhysicsSystem.Update(float, int, int, in JoltPhysicsSharp.TempAllocator, in JoltPhysicsSharp.JobSystemThreadPool)"/> call. This is a bit field, multiple errors can trigger in the same update.
@@ -28,4 +33,5 @@ public enum PhysicsUpdateError
     /// Increase inMaxContactConstraints in <see cref="PhysicsSystem.Init(uint, uint, uint, uint, BroadPhaseLayerInterfaceTable, ObjectVsBroadPhaseLayerFilter, ObjectLayerPairFilterTable)"/>.
     /// </summary>
 	ContactConstraintsFull = 1 << 2,
+}
 }

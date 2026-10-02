@@ -1,11 +1,20 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable enable
+
 using System.Diagnostics.CodeAnalysis;
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
 using System.Numerics;
+#endif
 using System.Runtime.CompilerServices;
 
-namespace JoltPhysicsSharp;
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>Defines a bounding box.</summary>
 public struct BoundingBox : IEquatable<BoundingBox>
@@ -18,7 +27,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <summary>
     /// A <see cref="BoundingBox"/> which represents an empty space.
     /// </summary>
-    public static BoundingBox Zero => new(Vector3.Zero, Vector3.Zero);
+    public static BoundingBox Zero => new(default(Vector3), default(Vector3));
 
     private Vector3 _min;
     private Vector3 _max;
@@ -85,7 +94,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
     public readonly float Width
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if UNITY_5_3_OR_NEWER
+        get => Extent.x * 2.0f;
+#else
         get => Extent.X * 2.0f;
+#endif
     }
 
     /// <summary>
@@ -94,7 +107,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
     public readonly float Height
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if UNITY_5_3_OR_NEWER
+        get => Extent.y * 2.0f;
+#else
         get => Extent.Y * 2.0f;
+#endif
 
     }
 
@@ -104,7 +121,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
     public readonly float Depth
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if UNITY_5_3_OR_NEWER
+        get => Extent.z * 2.0f;
+#else
         get => Extent.Z * 2.0f;
+#endif
     }
 
     /// <summary>
@@ -116,7 +137,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
         get
         {
             Vector3 sides = _max - _min;
+#if UNITY_5_3_OR_NEWER
+            return sides.x * sides.y * sides.z;
+#else
             return sides.X * sides.Y * sides.Z;
+#endif
         }
     }
 
@@ -127,7 +152,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
     public readonly float GetPerimeter()
     {
         Vector3 sides = _max - _min;
+#if UNITY_5_3_OR_NEWER
+        return 4 * (sides.x + sides.y + sides.z);
+#else
         return 4 * (sides.X + sides.Y + sides.Z);
+#endif
     }
 
     /// <summary>
@@ -137,7 +166,11 @@ public struct BoundingBox : IEquatable<BoundingBox>
     public readonly float GetSurfaceArea()
     {
         Vector3 sides = _max - _min;
+#if UNITY_5_3_OR_NEWER
+        return 2 * (sides.x * sides.y + sides.x * sides.z + sides.y * sides.z);
+#else
         return 2 * (sides.X * sides.Y + sides.X * sides.Z + sides.Y * sides.Z);
+#endif
     }
 
     /// <inheritdoc/>
@@ -164,8 +197,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(BoundingBox left, BoundingBox right)
     {
-        return (left._min == right._min)
-            && (left._max == right._max);
+        return left.Equals(right);
     }
 
     /// <summary>
@@ -179,8 +211,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(BoundingBox left, BoundingBox right)
     {
-        return (left._min != right._min)
-            || (left._max != right._max);
+        return !left.Equals(right);
     }
 
     /// <inheritdoc/>
@@ -194,4 +225,5 @@ public struct BoundingBox : IEquatable<BoundingBox>
     {
         return $"{nameof(BoundingBox)} {{ {nameof(Min)} = {Min.ToString(format, formatProvider)}, {nameof(Max)} = {Max.ToString(format, formatProvider)} }}";
     }
+}
 }

@@ -1,7 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-namespace JoltPhysicsSharp;
+#nullable enable
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 /// <summary>
 /// Enum used by constraints to specify how the spring is defined
@@ -16,4 +21,5 @@ public enum SpringMode
     /// Stiffness and damping are specified
     /// </summary>
 	StiffnessAndDamping
+}
 }

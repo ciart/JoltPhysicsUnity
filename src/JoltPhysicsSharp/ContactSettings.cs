@@ -1,11 +1,19 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using static JoltPhysicsSharp.JoltApi;
+#nullable enable
 
-namespace JoltPhysicsSharp;
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
+using System.Numerics;
+#endif
+using System.Runtime.CompilerServices;
+
+using System;
+
+namespace JoltPhysicsSharp
+{
 
 public struct ContactSettings
 {
@@ -45,4 +53,5 @@ public struct ContactSettings
     /// Relative angular surface velocity between the bodies (world space angular surface velocity of body 2 - world space angular surface velocity of body 1). Note that this angular velocity is relative to the center of mass of body 1, so if you want it relative to body 2's center of mass you need to add body 2 angular velocity x (body 1 world space center of mass - body 2 world space center of mass) to mRelativeLinearSurfaceVelocity.
     /// </summary>
 	public Vector3 RelativeAngularSurfaceVelocity;
+}
 }
