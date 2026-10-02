@@ -8,7 +8,7 @@ JoltPhysicsSharp를 Unity용 UPM 패키지로 이식한다. 위치·방향·회�
 
 패키지는 초기화, 월드·바디·형상 수명 관리, 시뮬레이션, 자세 조회, 충돌 쿼리와 이벤트를 담당한다. 게임의 `Playfield`, `Piece`, 세션, 프리팹 매핑과 렌더링은 사용하는 프로젝트에서 구현한다. 원본의 `JoltPhysicsSharp` 네임스페이스와 API 의미를 가능한 한 유지한다.
 
-개발 저장소는 [ciart/JoltPhysicsUnity](https://github.com/ciart/JoltPhysicsUnity)다. 저장소 루트가 UPM 패키지 루트이며, 네이티브 플러그인과 Unity 생성 메타데이터를 함께 보관한다. 현재 저장소는 비공개이므로 접근 권한과 Git 인증이 필요하다.
+개발 저장소는 [ciart/JoltPhysicsUnity](https://github.com/ciart/JoltPhysicsUnity)다. 저장소 루트가 UPM 패키지 루트이며, 네이티브 플러그인과 Unity 생성 메타데이터를 함께 보관한다. 공개 저장소이므로 다운로드에 GitHub 인증이 필요하지 않다.
 
 Pentricat의 로컬 준비 위치는 `LocalPackages/com.ciart.joltphysics`다. 다른 프로젝트로 패키지 폴더 전체를 옮길 수도 있다. 현재 Pentricat에는 설치하지 않았다.
 
@@ -39,7 +39,7 @@ Pentricat의 로컬 준비 위치는 `LocalPackages/com.ciart.joltphysics`다. �
 
 원본 NuGet JoltPhysicsSharp와 동일한 타입 이름을 사용하므로, 설치 대상 프로젝트에서 원본 관리 DLL과 이 패키지를 동시에 참조하지 않도록 정리해야 한다. 현재 지원 확인 환경은 macOS arm64 Editor다.
 
-Unity Package Manager에서 **Install package from git URL**을 선택하고 다음 URL을 입력한다. 설치할 컴퓨터에는 Git과 비공개 저장소에 접근할 인증이 설정되어 있어야 한다.
+Unity Package Manager에서 **Install package from git URL**을 선택하고 다음 URL을 입력한다. 설치할 컴퓨터에는 Git이 설치되어 있어야 한다.
 
 ```text
 https://github.com/ciart/JoltPhysicsUnity.git
