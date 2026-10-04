@@ -16,7 +16,7 @@ The goal is an independent UPM package, `JoltPhysicsUnity`, providing Unity math
 | CONTACT-01 | Added/Persisted/Removed and activation events; handle worker threads, exceptions and pointer lifetime | Not ported |
 | LIFE-01 | IDisposable, ownership, GCHandles, callback rooting, concurrent stepping/shutdown, duplicate release and disposed access | Not ported |
 | NATIVE-01 | Record single-precision native source, options, hashes and platform PluginImporter settings | No artifacts added |
-| PKG-01 | UPM package at the original src path, runtime assembly, licenses and standalone example; verify Unity import | Not packaged |
+| PKG-01 | UPM package at the original src path, runtime assembly, licenses and standalone example; verify Unity import | Manifest 0.1.0-preview.1, package README and MIT license added at src/JoltPhysicsSharp; runtime assembly, example and Unity import pending |
 | AOT-01 | Static callbacks, MonoPInvokeCallback, delegate rooting, stripping support and IL2CPP execution | Not ported |
 | PERF-01 | Measure allocations and call costs during repeated stepping and pose queries | Not measured |
 
@@ -28,7 +28,7 @@ RayCast and CastShape displacement vectors include length; fractions retain thei
 
 GameObjects, MonoBehaviours, prefab mapping and network ticks are outside the package. Callers control stepping and scene synchronization. Burst/Unity Jobs integration and cross-platform determinism are outside the first completion criteria.
 
-Publish the installation URL after verifying the repository rename and UPM import. Do not describe development sources as an installable release. Select the version when preparing a release.
+The current fork is [ciart/JoltPhysicsUnity](https://github.com/ciart/JoltPhysicsUnity). Its UPM package directory is `src/JoltPhysicsSharp`, with package ID `com.ciart.joltphysics` and initial development version `0.1.0-preview.1`. The README documents its Git dependency URL and Package Manager workflow. Metadata availability is distinct from a working runtime: the complete Unity assembly, native interop and Unity import are still pending. Do not describe the development package as a validated runtime release or increment its version for implementation steps.
 
 ## Current compilation checks
 

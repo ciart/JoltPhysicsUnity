@@ -1,0 +1,26 @@
+{
+  "name": "com.ciart.joltphysics",
+  "version": "0.1.0-preview.1",
+  "displayName": "JoltPhysicsUnity",
+  "description": "Work-in-progress Unity adaptation of JoltPhysicsSharp. The complete Unity runtime and native interop are still being ported.",
+  "unity": "6000.4",
+  "author": {
+    "name": "ciart",
+    "url": "https://github.com/ciart"
+  },
+  "license": "MIT",
+  "documentationUrl": "https://github.com/ciart/JoltPhysicsUnity#readme",
+  "changelogUrl": "https://github.com/ciart/JoltPhysicsUnity/blob/main/Unity~/Documentation/UpstreamChanges.md",
+  "licensesUrl": "https://github.com/ciart/JoltPhysicsUnity/blob/main/LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ciart/JoltPhysicsUnity.git"
+  },
+  "keywords": [
+    "physics",
+    "jolt",
+    "unity",
+    "native"
+  ],
+  "dependencies": {}
+}

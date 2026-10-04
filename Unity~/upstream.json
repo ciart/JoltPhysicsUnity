@@ -9,8 +9,11 @@
     "sourceDirectory": "src/JoltPhysicsSharp"
   },
   "unityPort": {
+    "repository": "https://github.com/ciart/JoltPhysicsUnity",
     "displayName": "JoltPhysicsUnity",
-    "plannedPackageId": "com.ciart.joltphysics",
+    "packageId": "com.ciart.joltphysics",
+    "packageVersion": "0.1.0-preview.1",
+    "packagePath": "src/JoltPhysicsSharp",
     "namespace": "JoltPhysicsSharp",
     "editorBaseline": "6000.4.8f1",
     "apiProfile": ".NET Standard 2.1",

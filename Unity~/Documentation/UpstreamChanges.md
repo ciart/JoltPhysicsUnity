@@ -55,3 +55,21 @@ Baseline: JoltPhysicsSharp 2.22.0, `3ab66bf9e970b10c2b22b8f5b88dfdc2c765a7fb`.
 - Impact: no managed source, API, ABI, tool or release-version changes. The 486 upstream commits remain ancestors of the consolidated commit. A local backup reference retains the previous port history.
 - Verification: remote main matched the inspected previous commit before rewriting. The consolidated commit has the pinned baseline as its sole parent. All files match the previous main tree except AGENTS and this change log; the prior compilation and layout results still apply. English-only repository content and a clean working tree were checked.
 - Publication: use force-with-lease with the inspected previous remote commit as the explicit expected value.
+
+## UNITY-007 — Update the repository address and Unity installation guidance (2026-10-04)
+
+- Original: README.md, Unity~/upstream.json and Unity~/Documentation/Implementation.md after UNITY-006; local origin configuration.
+- Changed: point origin to `https://github.com/ciart/JoltPhysicsUnity.git`, record the current Unity fork URL, and rewrite the README around the Unity port. Add Package Manager steps, the planned `?path=/src/JoltPhysicsSharp` URL, release-revision syntax and the existing source compilation workflow. Retain GPT (Codex) attribution, original author credits and MIT notices. Link upstream .NET installation instructions instead of presenting NuGet commands as Unity setup.
+- Reason: the user moved the fork and requested README updates with Unity installation instructions.
+- Impact: documentation and repository metadata only; no managed source, API, ABI, native artifact or release-version changes. Keep forkRepositoryAtStart as historical provenance.
+- Verification: GitHub reports a public fork at ciart/JoltPhysicsUnity with amerkoleci/JoltPhysicsSharp as its parent. Fetch confirms local and remote main match before editing. Inspect the repository for package.json and assembly definitions; neither is present. Check the documented Package Manager workflow, package-subfolder requirement and path-before-revision syntax against Unity 6.4 official documentation. Check local links, JSON validity, English-only content and the final diff.
+- Limits: the current main branch is not an installable Unity package. URLs are documented as future installation instructions, not verified installation results. No host package installation or additional runtime execution was performed for this documentation change.
+
+## UNITY-008 — Add the initial UPM manifest (2026-10-04)
+
+- Original: package manifest and package README are new. The package LICENSE is an unchanged copy of the upstream root LICENSE. Existing README, AGENTS, Unity~/upstream.json and Implementation.md follow UNITY-007.
+- Changed: add `src/JoltPhysicsSharp/package.json` for `com.ciart.joltphysics`, display name JoltPhysicsUnity, initial version `0.1.0-preview.1`, Unity baseline 6000.4 and English documentation/license links. Include README and MIT license inside the package subfolder. Update the root installation instructions, working rules and package metadata to reflect the actual manifest path.
+- Reason: the user requested package.json so the Git dependency URL can target a UPM manifest. Preserve original source paths instead of moving or replacing source files.
+- Impact: packaging and documentation only; no C# source, API, ABI, native binary, workflow or host project changes. The initial development version is not a new runtime release or an increment from the previous preview. No assembly definition or invented meta GUIDs are added.
+- Verification: parse the manifest and metadata, validate the required name/version fields and matching package ID/version/path, compare package LICENSE byte-for-byte with the original, verify local documentation links and English-only content, and check the diff. The documented package path contains its manifest. Follow Unity 6.4 official package-manifest and Git URL requirements.
+- Limits: Unity package resolution, the full assembly, native execution and CI execution have not been run for this packaging change. The manifest alone does not make the unported source a working Unity runtime; README and package description retain that status.
