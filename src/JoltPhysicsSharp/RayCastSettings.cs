@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -52,3 +53,5 @@ public struct RayCastSettings : IEquatable<RayCastSettings>
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(BackFaceModeTriangles, BackFaceModeConvex, TreatConvexAsSolid);
 }
+
+#endif

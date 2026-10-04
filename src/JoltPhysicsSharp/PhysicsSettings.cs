@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -32,3 +33,5 @@ public record struct PhysicsSettings
     public Bool8 AllowSleeping;
     public Bool8 CheckActiveEdges;
 }
+
+#endif

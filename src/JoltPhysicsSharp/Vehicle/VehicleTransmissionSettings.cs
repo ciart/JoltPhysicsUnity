@@ -1,4 +1,5 @@
-﻿// Copyright (c) Amer Koleci and Contributors.
+#if !UNITY_5_3_OR_NEWER
+// Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
 using System;
@@ -142,3 +143,5 @@ public class VehicleTransmissionSettings : NativeObject
 
     internal static VehicleTransmissionSettings? GetObject(nint handle) => GetOrAddObject(handle, (nint h) => new VehicleTransmissionSettings(h, false));
 }
+
+#endif

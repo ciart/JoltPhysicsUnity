@@ -1,6 +1,98 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using static JoltPhysicsSharp.JoltApi;
+namespace JoltPhysicsSharp
+{
+    public struct PhysicsSystemSettings
+    {
+        public int MaxBodies { get; set; }
+        public int NumBodyMutexes { get; set; }
+        public int MaxBodyPairs { get; set; }
+        public int MaxContactConstraints { get; set; }
+        public ObjectLayerPairFilter ObjectLayerPairFilter { get; set; }
+        public BroadPhaseLayerInterface BroadPhaseLayerInterface { get; set; }
+        public ObjectVsBroadPhaseLayerFilter ObjectVsBroadPhaseLayerFilter { get; set; }
+    }
+    public sealed unsafe class PhysicsSystem : NativeObject
+    {
+        private readonly NativeObject[] filters;
+        private readonly HashSet<uint> bodies = new HashSet<uint>();
+        private IntPtr allocator;
+        public PhysicsSystem(PhysicsSystemSettings settings)
+        {
+            if (settings.ObjectLayerPairFilter == null || settings.BroadPhaseLayerInterface == null || settings.ObjectVsBroadPhaseLayerFilter == null)
+                throw new ArgumentException("All three collision filtering objects are required.", nameof(settings));
+            if (settings.MaxBodies < 0 || settings.MaxBodyPairs < 0 || settings.MaxContactConstraints < 0 || settings.NumBodyMutexes < 0)
+                throw new ArgumentOutOfRangeException(nameof(settings));
+            filters = new NativeObject[] { settings.BroadPhaseLayerInterface, settings.ObjectLayerPairFilter, settings.ObjectVsBroadPhaseLayerFilter };
+            lock (Foundation.SyncRoot)
+            {
+                foreach (NativeObject filter in filters) filter.RequireTransferable();
+                NativePhysicsSystemSettings native = new NativePhysicsSystemSettings
+                {
+                    padding = 0,
+                    maxBodies = settings.MaxBodies,
+                    numBodyMutexes = settings.NumBodyMutexes,
+                    maxBodyPairs = settings.MaxBodyPairs,
+                    maxContactConstraints = settings.MaxContactConstraints,
+                    broadPhaseLayerInterface = settings.BroadPhaseLayerInterface.Handle,
+                    objectLayerPairFilter = settings.ObjectLayerPairFilter.Handle,
+                    objectVsBroadPhaseLayerFilter = settings.ObjectVsBroadPhaseLayerFilter.Handle
+                };
+                allocator = JPH_TempAllocatorMalloc_Create();
+                if (allocator == IntPtr.Zero) throw new InvalidOperationException("Temp allocator creation failed.");
+                try
+                {
+                    Handle = JPH_PhysicsSystem_Create(&native);
+                    foreach (NativeObject filter in filters) filter.TransferTo(this);
+                }
+                catch
+                {
+                    JPH_TempAllocator_Destroy(allocator);
+                    allocator = IntPtr.Zero;
+                    throw;
+                }
+            }
+        }
+        public uint BodiesCount => JPH_PhysicsSystem_GetNumBodies(Handle);
+        public uint MaxBodies => JPH_PhysicsSystem_GetMaxBodies(Handle);
+        public Vector3 Gravity
+        {
+            get { JPH_PhysicsSystem_GetGravity(Handle, out Vector3 value); return value; }
+            set => JPH_PhysicsSystem_SetGravity(Handle, in value);
+        }
+        public BodyInterface BodyInterface => new BodyInterface(this, JPH_PhysicsSystem_GetBodyInterface(Handle));
+        public NarrowPhaseQuery NarrowPhaseQuery => new NarrowPhaseQuery(this, JPH_PhysicsSystem_GetNarrowPhaseQuery(Handle));
+        public void OptimizeBroadPhase() => JPH_PhysicsSystem_OptimizeBroadPhase(Handle);
+        public PhysicsUpdateError Update(float deltaTime, int collisionSteps, JobSystem jobSystem)
+        {
+            if (jobSystem == null) throw new ArgumentNullException(nameof(jobSystem));
+            if (float.IsNaN(deltaTime) || float.IsInfinity(deltaTime) || deltaTime <= 0 || collisionSteps < 1)
+                throw new ArgumentOutOfRangeException(nameof(deltaTime));
+            lock (Foundation.SyncRoot)
+                return JPH_PhysicsSystem_Update2(Handle, deltaTime, collisionSteps, allocator, jobSystem.Handle);
+        }
+        internal void Track(BodyID id) => bodies.Add(id.ID);
+        internal void Untrack(BodyID id) => bodies.Remove(id.ID);
+        protected override void DisposeNative()
+        {
+            IntPtr bodyInterface = JPH_PhysicsSystem_GetBodyInterface(Handle);
+            foreach (uint id in bodies) JPH_BodyInterface_RemoveAndDestroyBody(bodyInterface, id);
+            bodies.Clear();
+            JPH_PhysicsSystem_Destroy(Handle);
+            foreach (NativeObject filter in filters) filter.InvalidateFromOwner();
+            JPH_TempAllocator_Destroy(allocator);
+            allocator = IntPtr.Zero;
+        }
+    }
+}
+#else
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -405,3 +497,5 @@ public sealed unsafe class PhysicsSystem : NativeObject
     }
     #endregion BodyActivationListener
 }
+
+#endif

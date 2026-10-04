@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 // see: https://github.com/mono/SkiaSharp/blob/main/binding/SkiaSharp/PlatformLock.cs
@@ -145,3 +146,5 @@ internal static partial class PlatformLock
         private static partial void LeaveCriticalSection(IntPtr lpCriticalSection);
     }
 }
+
+#endif

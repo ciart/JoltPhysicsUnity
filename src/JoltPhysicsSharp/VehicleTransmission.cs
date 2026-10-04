@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -37,3 +38,5 @@ public sealed class VehicleTransmission : NativeObject
 
     public bool AllowSleep => JPH_VehicleTransmission_AllowSleep(Handle);
 }
+
+#endif

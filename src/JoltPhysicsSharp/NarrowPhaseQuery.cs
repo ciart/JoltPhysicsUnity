@@ -1,6 +1,26 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using static JoltPhysicsSharp.JoltApi;
+namespace JoltPhysicsSharp
+{
+    public readonly struct NarrowPhaseQuery
+    {
+        private readonly PhysicsSystem owner;
+        private readonly IntPtr handle;
+        internal NarrowPhaseQuery(PhysicsSystem owner, IntPtr handle) { this.owner = owner; this.handle = handle; }
+        public bool CastRay(in Ray ray, out RayCastResult hit)
+        {
+            owner.ThrowIfDisposed();
+            hit = RayCastResult.Default;
+            return JPH_NarrowPhaseQuery_CastRay(handle, in ray.Position, in ray.Direction, out hit, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+        }
+    }
+}
+#else
 using System.Numerics;
 using System.Runtime.InteropServices;
 using static JoltPhysicsSharp.JoltApi;
@@ -791,3 +811,5 @@ public readonly unsafe struct NarrowPhaseQuery : IEquatable<NarrowPhaseQuery>
     }
     #endregion
 }
+
+#endif

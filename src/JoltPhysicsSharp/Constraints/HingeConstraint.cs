@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -239,3 +240,5 @@ public sealed unsafe class HingeConstraint : TwoBodyConstraint
     public float TotalLambdaRotationLimits => JPH_HingeConstraint_GetTotalLambdaRotationLimits(Handle);
     public float TotalLambdaMotor => JPH_HingeConstraint_GetTotalLambdaMotor(Handle);
 }
+
+#endif

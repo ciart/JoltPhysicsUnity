@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -31,3 +32,5 @@ public sealed class CapsuleShape : ConvexShape
     public float Radius => JPH_CapsuleShape_GetRadius(Handle);
     public float HalfHeightOfCylinder => JPH_CapsuleShape_GetHalfHeightOfCylinder(Handle);
 }
+
+#endif

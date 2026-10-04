@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -105,3 +106,5 @@ public unsafe class ConeConstraint : TwoBodyConstraint
 
     public float TotalLambdaRotation => JPH_ConeConstraint_GetTotalLambdaRotation(Handle);
 }
+
+#endif

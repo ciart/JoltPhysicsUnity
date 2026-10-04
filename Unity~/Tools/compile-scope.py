@@ -14,6 +14,7 @@ def main():
                         help="Unity.app/Contents or the Windows/Linux Editor root")
     parser.add_argument("--dotnet", default="dotnet", help="dotnet executable")
     parser.add_argument("--scope", default="foundations")
+    parser.add_argument("--variant", choices=("both", "unity", "netstandard"), default="both")
     parser.add_argument("--output", type=Path,
                         help="output directory; defaults to a system temporary directory")
     args = parser.parse_args()
@@ -41,7 +42,8 @@ def main():
         if not source.is_file():
             parser.error("Source file not found: " + str(source))
 
-    for variant in ("netstandard", "unity"):
+    variants = ("netstandard", "unity") if args.variant == "both" else (args.variant,)
+    for variant in variants:
         options = ["-nologo", "-target:library", "-langversion:9.0",
                    "-nullable:enable", "-warnaserror+", "-nostdlib+", "-unsafe+",
                    "-out:" + str(output / (args.scope + "." + variant + ".dll"))]

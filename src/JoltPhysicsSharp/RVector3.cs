@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -409,3 +410,5 @@ public struct RVector3 : IEquatable<RVector3>, IFormattable
         return Unsafe.Add(ref Unsafe.As<RVector3, double>(ref vector), index);
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Amer Koleci and Contributors.
+#if !UNITY_5_3_OR_NEWER
+// Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
 using System;
@@ -158,3 +159,5 @@ public class TrackedVehicleController : VehicleController
     public VehicleTrack LeftTrack => GetTrack(TrackSide.Left);
     public VehicleTrack RightTrack => GetTrack(TrackSide.Right);
 }
+
+#endif

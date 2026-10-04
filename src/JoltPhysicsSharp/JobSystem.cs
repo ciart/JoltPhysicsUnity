@@ -1,9 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable disable
+using System;
 using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 public abstract class JobSystem : NativeObject
 {
@@ -17,4 +20,6 @@ public abstract class JobSystem : NativeObject
     {
         JPH_JobSystem_Destroy(Handle);
     }
+}
+
 }

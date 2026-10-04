@@ -6,7 +6,7 @@ A Unity port of [JoltPhysicsSharp](https://github.com/amerkoleci/JoltPhysicsShar
 
 The intended runtime uses Unity math types and lets plain C# code own and step physics data. GameObjects, prefab creation and Transform synchronization remain the responsibility of the game. The C# namespace stays **JoltPhysicsSharp**; the UPM package ID is **com.ciart.joltphysics**.
 
-**Development package: runtime port incomplete.** A UPM manifest is available at the repository root as `package.json`, version `0.1.0-preview.1`. The complete Unity assembly, native interop and Unity import are not yet verified. Adding the Git dependency does not yet provide a working physics runtime.
+**Development package: limited box runtime verified on macOS arm64 Editor.** Version remains `0.1.0-preview.1`. The original files now provide initialization, box shapes, basic body creation/pose/velocity access, fixed stepping and closest-hit raycasts. The complete JoltPhysicsSharp API is still being ported; unsupported Unity sources are excluded from compilation.
 
 ## Adding to Unity
 
@@ -37,14 +37,14 @@ Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4
 
 | Area | Verified in this fork |
 | --- | --- |
-| UPM metadata | Manifest, README and MIT license at the repository root; JSON checked, Unity import not yet verified |
-| Source compatibility | 48 original foundational, enum, geometry and query-result files compile against C# 9 / .NET Standard 2.1 in Unity and .NET paths |
-| Math types | Unity types applied to the ported geometry and result types; full rotation and native matrix paths pending |
+| UPM metadata | Root manifest, runtime asmdef, Unity-generated source metadata and macOS PluginImporter settings; embedded import verified |
+| Source compatibility | 66 original files compile in the Unity runtime scope; 111 unported files are excluded from Unity, preserving their .NET source |
+| Math types | Unity geometry, box/body vectors and quaternions; initial position and yaw round trips pass; advanced native matrices pending |
 | Structure layout | 22 type sizes and 29 field offsets match the pinned C header in a macOS arm64 inspection hosted on .NET 9 |
-| Complete Unity assembly and UPM import | Not verified |
-| Native world/body execution and player builds | Not verified |
+| Unity runtime assembly | Enabled box-runtime assembly and embedded package import verified; full API port incomplete |
+| Native execution | Actual Editor box/floor simulation, closest-hit raycast and 5 repeated cleanup cycles pass; player builds remain unverified |
 
-Compilation and layout inspection do not establish native execution or package usability. Results from the previous standalone repository are not treated as validation of this fork.
+Native checks ran against this fork and its unchanged upstream macOS binary. Results from the previous standalone repository are not used as validation. Compound shapes, contact callbacks, custom query filters, complete body APIs, Windows, IL2CPP and performance remain outside the verified scope.
 
 See the [implementation requirements](Unity~/Documentation/Implementation.md), [changes from upstream](Unity~/Documentation/UpstreamChanges.md), and [pinned source baseline](Unity~/upstream.json) for scope and remaining work. The manifest starts at `0.1.0-preview.1`; its version will not be incremented for each implementation step.
 
@@ -66,7 +66,9 @@ python3 'Unity~/Tools/compile-scope.py' \
   --scope geometry
 ```
 
-The example uses the macOS Editor layout. Supply your own Editor path. The tool compiles the 48-file scope through Unity and non-Unity paths; it does not install a package or run physics. Do not copy the complete source folder into `Assets`: the unported files still require unsupported language features and runtime APIs.
+The example uses the macOS Editor layout. Supply your own Editor path. The geometry scope compiles 48 files through Unity and non-Unity paths. Use `--scope runtime --variant unity` for the 66-file box runtime. The compiler does not install packages or run physics. Unsupported original files are guarded out in Unity until ported.
+
+For import metadata, use Unity on a writable embedded package, not its immutable Git cache. See the [metadata generation workflow](Unity~/Documentation/Implementation.md#box-runtime-verification-2026-10-04). Unity creates the GUIDs, and [GenerateImportMetadata.cs](Unity~/Tools/GenerateImportMetadata.cs) configures the native plugin. Keep all generated source and plugin meta files in version control.
 
 ## Credits and license
 

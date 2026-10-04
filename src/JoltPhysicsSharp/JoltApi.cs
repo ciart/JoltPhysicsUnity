@@ -1,6 +1,265 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+using UnityEngine;
+namespace JoltPhysicsSharp
+{
+    internal static unsafe class JoltApi
+    {
+        private const string LibName = "joltc";
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void TraceCallback(IntPtr message);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        internal delegate bool AssertCallback(IntPtr expression, IntPtr message, IntPtr file, uint line);
+        [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void JPH_SetTraceHandler(TraceCallback callback);
+        [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void JPH_SetAssertFailureHandler(AssertCallback callback);
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct NativePhysicsSystemSettings
+        {
+            internal int maxBodies;
+            internal int numBodyMutexes;
+            internal int maxBodyPairs;
+            internal int maxContactConstraints;
+            internal int padding;
+            internal IntPtr broadPhaseLayerInterface;
+            internal IntPtr objectLayerPairFilter;
+            internal IntPtr objectVsBroadPhaseLayerFilter;
+        }
+        internal static string ConvertToManaged(IntPtr pointer)
+        {
+            if (pointer == IntPtr.Zero) return string.Empty;
+            byte* start = (byte*)pointer;
+            int length = 0;
+            while (start[length] != 0) length++;
+            return Encoding.UTF8.GetString(start, length);
+        }
+        [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr JPH_TempAllocatorMalloc_Create();
+        [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void JPH_TempAllocator_Destroy(IntPtr allocator);
+        [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern PhysicsUpdateError JPH_PhysicsSystem_Update2(IntPtr system, float deltaTime, int collisionSteps, IntPtr allocator, IntPtr jobs);
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool JPH_Init();
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_Shutdown();
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_JobSystemThreadPool_Create(JobSystemThreadPoolConfig* config);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_JobSystemThreadPool_Create(in JobSystemThreadPoolConfig config);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_JobSystem_Destroy(nint jobSystem);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BroadPhaseLayerInterface_Destroy(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BroadPhaseLayerInterfaceTable_Create(uint numObjectLayers, uint numBroadPhaseLayers);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BroadPhaseLayerInterfaceTable_MapObjectToBroadPhaseLayer(nint bpInterface, uint objectLayer, byte broadPhaseLayer);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_ObjectVsBroadPhaseLayerFilterTable_Create(nint broadPhaseLayerInterface, uint numBroadPhaseLayers, nint objectLayerPairFilter, uint numObjectLayers);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ObjectVsBroadPhaseLayerFilter_Destroy(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ObjectLayerPairFilter_Destroy(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_ObjectLayerPairFilterTable_Create(uint numObjectLayers);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ObjectLayerPairFilterTable_DisableCollision(nint objectFilter, ObjectLayer layer1, ObjectLayer layer2);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ObjectLayerPairFilterTable_EnableCollision(nint objectFilter, ObjectLayer layer1, ObjectLayer layer2);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ShapeSettings_Destroy(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong JPH_ShapeSettings_GetUserData(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ShapeSettings_SetUserData(nint settings, ulong userData);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_Shape_Destroy(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ShapeType JPH_Shape_GetType(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ShapeSubType JPH_Shape_GetSubType(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong JPH_Shape_GetUserData(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_Shape_SetUserData(nint shape, ulong userData);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_Shape_GetCenterOfMass(nint handle, out Vector3 result);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_Shape_GetLocalBounds(nint shape, out BoundingBox box);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_Shape_GetInnerRadius(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_Shape_GetVolume(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_ConvexShape_GetDensity(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ConvexShape_SetDensity(nint shape, float value);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BoxShapeSettings_Create(in Vector3 halfExtent, float convexRadius);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BoxShapeSettings_CreateShape(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BoxShape_Create(in Vector3 halfExtent, float convexRadius);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BoxShape_GetHalfExtent(nint handle, out Vector3 halfExtent);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_BoxShape_GetConvexRadius(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_ConvexShapeSettings_GetDensity(nint shape);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_ConvexShapeSettings_SetDensity(nint shape, float value);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BodyCreationSettings_Create();
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BodyCreationSettings_Create2(nint shapeSettings, Vector3* position, Quaternion* rotation, MotionType motionType, uint objectLayer);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_BodyCreationSettings_Create3(nint shape, Vector3* position, Quaternion* rotation, MotionType motionType, uint objectLayer);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_Destroy(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_GetPosition(nint settings, Vector3* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_SetPosition(nint settings, Vector3* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_GetRotation(nint settings, Quaternion* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_SetRotation(nint settings, Quaternion* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_BodyCreationSettings_GetFriction(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_SetFriction(nint settings, float value);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern float JPH_BodyCreationSettings_GetRestitution(nint settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyCreationSettings_SetRestitution(nint settings, float value);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_PhysicsSystem_Create(NativePhysicsSystemSettings* settings);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_PhysicsSystem_Destroy(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_PhysicsSystem_OptimizeBroadPhase(nint handle);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint JPH_PhysicsSystem_GetNumBodies(nint system);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint JPH_PhysicsSystem_GetMaxBodies(nint system);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_PhysicsSystem_GetGravity(nint handle, out Vector3 velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_PhysicsSystem_SetGravity(nint handle, in Vector3 velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_PhysicsSystem_GetBodyInterface(nint system);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint JPH_BodyInterface_CreateAndAddBody(nint handle, nint bodyID, Activation activation);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_RemoveAndDestroyBody(nint handle, uint bodyID);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_GetLinearVelocity(nint handle, uint bodyID, Vector3* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_SetLinearVelocity(nint handle, uint bodyID, Vector3* velocity);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool JPH_BodyInterface_IsAdded(nint handle, uint bodyID);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_SetPosition(nint handle, uint bodyId, in Vector3 position, Activation activationMode);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_GetPosition(nint handle, uint bodyId, out Vector3 position);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_GetRotation(nint handle, uint bodyId, out Quaternion rotation);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void JPH_BodyInterface_SetPositionAndRotation(nint handle, uint bodyID, in Vector3 position, in Quaternion rotation, Activation activationMode);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool JPH_BodyInterface_IsActive(nint handle, uint bodyID);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern nint JPH_PhysicsSystem_GetNarrowPhaseQuery(nint system);
+
+[DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool JPH_NarrowPhaseQuery_CastRay(nint system,
+        in Vector3 origin, in Vector3 direction,
+        out RayCastResult hit,
+        nint broadPhaseLayerFilter,
+        nint objectLayerFilter,
+        nint bodyFilter);
+    }
+}
+#else
 using System.Diagnostics;
 using System.Numerics;
 using System.Reflection;
@@ -4124,3 +4383,5 @@ internal static unsafe partial class JoltApi
         }
     }
 }
+
+#endif

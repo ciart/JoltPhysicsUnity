@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -55,3 +56,5 @@ public class SkeletalAnimation : NativeObject
 
     internal static SkeletalAnimation? GetObject(nint handle) => GetOrAddObject(handle, h => new SkeletalAnimation(h, false));
 }
+
+#endif

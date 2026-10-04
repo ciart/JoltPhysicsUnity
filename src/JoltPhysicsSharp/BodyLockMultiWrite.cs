@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -33,3 +34,5 @@ public readonly struct BodyLockMultiWrite : IEquatable<BodyLockMultiWrite>, IDis
         return Body.GetObject(JPH_BodyLockMultiWrite_GetBody(Handle, bodyIndex));
     }
 }
+
+#endif

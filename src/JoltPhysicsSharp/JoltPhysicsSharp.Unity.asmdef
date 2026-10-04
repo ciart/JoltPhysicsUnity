@@ -1,0 +1,8 @@
+{
+  "name": "JoltPhysicsSharp.Unity",
+  "rootNamespace": "JoltPhysicsSharp",
+  "references": [],
+  "allowUnsafeCode": true,
+  "autoReferenced": true,
+  "defineConstraints": []
+}

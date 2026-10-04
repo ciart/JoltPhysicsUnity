@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 // see: https://github.com/mono/SkiaSharp/blob/main/binding/SkiaSharp/HandleDictionary.cs
@@ -243,3 +244,5 @@ internal static class HandleDictionary
         return false;
     }
 }
+
+#endif

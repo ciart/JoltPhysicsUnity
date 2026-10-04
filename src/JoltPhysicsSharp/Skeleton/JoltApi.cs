@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -123,3 +124,5 @@ internal static unsafe partial class JoltApi
     public static partial bool JPH_SkeletonMapper_IsJointTranslationLocked(nint mapper, int joint2Index);
     #endregion
 }
+
+#endif

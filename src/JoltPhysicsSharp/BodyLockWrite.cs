@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -21,3 +22,5 @@ public readonly struct BodyLockWrite
     /// </summary>
     public bool SucceededAndIsInBroadPhase => BodyHandle != 0 && Body!.IsInBroadPhase;
 }
+
+#endif

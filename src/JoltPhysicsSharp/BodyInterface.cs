@@ -1,6 +1,66 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using UnityEngine;
+using static JoltPhysicsSharp.JoltApi;
+namespace JoltPhysicsSharp
+{
+    public readonly unsafe struct BodyInterface : IEquatable<BodyInterface>
+    {
+        private readonly PhysicsSystem owner;
+        private readonly IntPtr handle;
+        internal BodyInterface(PhysicsSystem owner, IntPtr handle) { this.owner = owner; this.handle = handle; }
+        public IntPtr Handle
+        {
+            get { owner?.ThrowIfDisposed(); if (handle == IntPtr.Zero) throw new InvalidOperationException("Null body interface."); return handle; }
+        }
+        public BodyID CreateAndAddBody(BodyCreationSettings settings, Activation activationMode)
+        {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+            BodyID id = new BodyID(JPH_BodyInterface_CreateAndAddBody(Handle, settings.Handle, activationMode));
+            if (id.IsValid) owner?.Track(id);
+            return id;
+        }
+        public void RemoveAndDestroyBody(in BodyID id)
+        {
+            JPH_BodyInterface_RemoveAndDestroyBody(Handle, id);
+            owner?.Untrack(id);
+        }
+        public Vector3 GetPosition(in BodyID id)
+        {
+            JPH_BodyInterface_GetPosition(Handle, id, out Vector3 result);
+            return result;
+        }
+        public void GetPosition(in BodyID id, out Vector3 position) => JPH_BodyInterface_GetPosition(Handle, id, out position);
+        public Quaternion GetRotation(in BodyID id)
+        {
+            JPH_BodyInterface_GetRotation(Handle, id, out Quaternion result);
+            return result;
+        }
+        public Vector3 GetLinearVelocity(in BodyID id)
+        {
+            Vector3 result;
+            JPH_BodyInterface_GetLinearVelocity(Handle, id, &result);
+            return result;
+        }
+        public void SetLinearVelocity(in BodyID id, in Vector3 velocity)
+        {
+            fixed (Vector3* pointer = &velocity)
+                JPH_BodyInterface_SetLinearVelocity(Handle, id, pointer);
+        }
+        public void SetPosition(in BodyID id, in Vector3 position, Activation activationMode) => JPH_BodyInterface_SetPosition(Handle, id, in position, activationMode);
+        public void SetPositionAndRotation(in BodyID id, in Vector3 position, in Quaternion rotation, Activation activationMode) => JPH_BodyInterface_SetPositionAndRotation(Handle, id, in position, in rotation, activationMode);
+        public bool IsActive(in BodyID id) => JPH_BodyInterface_IsActive(Handle, id);
+        public bool IsAdded(in BodyID id) => JPH_BodyInterface_IsAdded(Handle, id);
+        public bool Equals(BodyInterface other) => handle == other.handle;
+        public override bool Equals(object obj) => obj is BodyInterface other && Equals(other);
+        public override int GetHashCode() => handle.GetHashCode();
+    }
+}
+#else
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using static JoltPhysicsSharp.JoltApi;
@@ -710,3 +770,5 @@ public readonly unsafe struct BodyInterface(nint handle) : IEquatable<BodyInterf
         JPH_BodyInterface_InvalidateContactCache(Handle, bodyId);
     }
 }
+
+#endif

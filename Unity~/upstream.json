@@ -19,10 +19,20 @@
     "apiProfile": ".NET Standard 2.1",
     "languageVersion": "9.0",
     "precisionFirstMilestone": "single",
-    "stage": "source-port-in-progress",
-    "nativeExecutionValidated": false,
+    "stage": "box-runtime-verified-macos-editor",
+    "nativeExecutionValidated": true,
     "upmInstallValidated": false,
-    "compiledOriginalFiles": 48
+    "compiledOriginalFiles": 66,
+    "unityRuntimeScope": "runtime",
+    "unportedUnityFilesExcluded": 111,
+    "verifiedNativeChecks": [
+      "300 fixed 1/60-second steps",
+      "initial position and yaw round trip",
+      "finite normalized poses",
+      "floor collision and rest",
+      "closest-hit raycast ID and fraction",
+      "5 additional init/world/shutdown cycles"
+    ]
   },
   "nativeReference": {
     "repository": "https://github.com/amerkoleci/joltc",
@@ -31,6 +41,19 @@
     "headerSha256": "5b6e2ca74170bb0c7760463e965f9958691a15bbf7b80ffd005886c9895759a7",
     "dependencyVersion": "1.1.0",
     "engineVersion": "5.6.0",
-    "artifactsAddedInThisFork": false
+    "artifactsAddedInThisFork": false,
+    "enabledArtifact": {
+      "path": "native/osx/libjoltc.dylib",
+      "sha256": "386dbeec5e6892c218f9692572528ee3af748184c9298861c90aac1e3443c2ec",
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "executionVerified": [
+        "macOS arm64 Editor"
+      ],
+      "buildOptions": "Not reconstructed; unchanged binary inherited from upstream."
+    }
   }
 }

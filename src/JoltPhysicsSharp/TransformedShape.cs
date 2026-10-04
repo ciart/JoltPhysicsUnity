@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -154,3 +155,5 @@ public unsafe record struct TransformedShape
         return Shape!.CollidePoint(in shapePoint, collectorType, result, shapeFilter);
     }
 }
+
+#endif

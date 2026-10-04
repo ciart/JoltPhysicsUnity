@@ -1,6 +1,99 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using System.Runtime.InteropServices;
+using UnityEngine;
+namespace JoltPhysicsSharp
+{
+    public static class Foundation
+    {
+        public const float DefaultCollisionTolerance = 1.0e-4f;
+        public const float DefaultPenetrationTolerance = 1.0e-4f;
+        public const float DefaultConvexRadius = 0.05f;
+        public const float CapsuleProjectionSlop = 0.02f;
+        public const int MaxPhysicsJobs = 2048;
+        public const int MaxPhysicsBarriers = 8;
+        internal static readonly object SyncRoot = new object();
+        internal static int LiveObjects;
+        private static int users;
+        private static TraceDelegate traceHandler;
+        private static AssertFailedDelegate assertHandler;
+        private static readonly JoltApi.TraceCallback traceCallback = OnNativeTrace;
+        private static readonly JoltApi.AssertCallback assertCallback = OnNativeAssert;
+        public delegate void TraceDelegate(string message);
+        public delegate bool AssertFailedDelegate(string expression, string message, string file, uint line);
+
+        public static bool Init(bool doublePrecision = false)
+        {
+            if (doublePrecision)
+                throw new NotSupportedException("The Unity runtime currently supports single precision only.");
+            lock (SyncRoot)
+            {
+                if (users > 0)
+                {
+                    users++;
+                    return true;
+                }
+                if (!JoltApi.JPH_Init())
+                    return false;
+                users = 1;
+                JoltApi.JPH_SetTraceHandler(traceCallback);
+                JoltApi.JPH_SetAssertFailureHandler(assertCallback);
+                return true;
+            }
+        }
+        public static void Shutdown()
+        {
+            lock (SyncRoot)
+            {
+                if (users == 0)
+                    return;
+                if (users > 1)
+                {
+                    users--;
+                    return;
+                }
+                if (LiveObjects != 0)
+                    throw new InvalidOperationException("Dispose all Jolt native objects before shutting down the runtime.");
+                JoltApi.JPH_SetTraceHandler(null);
+                JoltApi.JPH_SetAssertFailureHandler(null);
+                JoltApi.JPH_Shutdown();
+                users = 0;
+            }
+        }
+        internal static void RequireInitialized()
+        {
+            if (users == 0)
+                throw new InvalidOperationException("Call Foundation.Init before creating native objects.");
+        }
+        public static void SetTraceHandler(TraceDelegate callback) => traceHandler = callback;
+        public static void SetAssertFailureHandler(AssertFailedDelegate callback) => assertHandler = callback;
+        internal static void ReportCallbackException(Exception exception) => Debug.LogException(exception);
+
+        [AOT.MonoPInvokeCallback(typeof(JoltApi.TraceCallback))]
+        private static void OnNativeTrace(IntPtr message)
+        {
+            try { traceHandler?.Invoke(JoltApi.ConvertToManaged(message)); }
+            catch (Exception exception) { ReportCallbackException(exception); }
+        }
+        [AOT.MonoPInvokeCallback(typeof(JoltApi.AssertCallback))]
+        private static bool OnNativeAssert(IntPtr expression, IntPtr message, IntPtr file, uint line)
+        {
+            try
+            {
+                if (assertHandler != null)
+                    return assertHandler(JoltApi.ConvertToManaged(expression), JoltApi.ConvertToManaged(message), JoltApi.ConvertToManaged(file), line);
+                Debug.LogError("Jolt assertion: " + JoltApi.ConvertToManaged(expression) + " at " + JoltApi.ConvertToManaged(file) + ":" + line);
+            }
+            catch (Exception exception) { ReportCallbackException(exception); }
+            return false;
+        }
+    }
+}
+#else
 using System.Runtime.InteropServices;
 using static JoltPhysicsSharp.JoltApi;
 
@@ -92,3 +185,5 @@ public static class Foundation
         return Bool8.True;
     }
 }
+
+#endif

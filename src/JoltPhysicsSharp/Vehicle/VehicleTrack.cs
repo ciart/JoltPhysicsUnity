@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -26,3 +27,5 @@ public sealed class VehicleTrack : NativeObject
     public float MaxBrakeTorque => JPH_VehicleTrack_GetMaxBrakeTorque(Handle);
     public float DifferentialRatio => JPH_VehicleTrack_GetDifferentialRatio(Handle);
 }
+
+#endif

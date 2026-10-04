@@ -1,10 +1,17 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable disable
+using System;
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#else
 using System.Numerics;
+#endif
 using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 public sealed class BoxShapeSettings : ConvexShapeSettings
 {
@@ -40,4 +47,6 @@ public sealed class BoxShape : ConvexShape
     public void GetHalfExtent(out Vector3 halfExtent) => JPH_BoxShape_GetHalfExtent(Handle, out halfExtent);
 
     public float ConvexRadius => JPH_BoxShape_GetConvexRadius(Handle);
+}
+
 }

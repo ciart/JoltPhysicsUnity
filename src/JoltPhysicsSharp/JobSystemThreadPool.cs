@@ -1,9 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable disable
+using System;
 using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 public sealed unsafe class JobSystemThreadPool : JobSystem
 {
@@ -23,4 +26,6 @@ public struct JobSystemThreadPoolConfig
     public uint maxJobs;
     public uint maxBarriers;
     public int numThreads;
+}
+
 }

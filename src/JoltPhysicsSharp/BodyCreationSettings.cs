@@ -1,6 +1,54 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using UnityEngine;
+using static JoltPhysicsSharp.JoltApi;
+namespace JoltPhysicsSharp
+{
+    public sealed unsafe class BodyCreationSettings : NativeObject
+    {
+        public BodyCreationSettings() : base(JPH_BodyCreationSettings_Create()) { }
+        public BodyCreationSettings(Shape shape, in Vector3 position, in Quaternion rotation, MotionType motionType, ObjectLayer objectLayer)
+        {
+            if (shape == null) throw new ArgumentNullException(nameof(shape));
+            fixed (Vector3* positionPtr = &position)
+            fixed (Quaternion* rotationPtr = &rotation)
+                Handle = JPH_BodyCreationSettings_Create3(shape.Handle, positionPtr, rotationPtr, motionType, objectLayer);
+        }
+        public BodyCreationSettings(ShapeSettings shapeSettings, in Vector3 position, in Quaternion rotation, MotionType motionType, ObjectLayer objectLayer)
+        {
+            if (shapeSettings == null) throw new ArgumentNullException(nameof(shapeSettings));
+            fixed (Vector3* positionPtr = &position)
+            fixed (Quaternion* rotationPtr = &rotation)
+                Handle = JPH_BodyCreationSettings_Create2(shapeSettings.Handle, positionPtr, rotationPtr, motionType, objectLayer);
+        }
+        protected override void DisposeNative() => JPH_BodyCreationSettings_Destroy(Handle);
+        public Vector3 Position
+        {
+            get { Vector3 result; JPH_BodyCreationSettings_GetPosition(Handle, &result); return result; }
+            set => JPH_BodyCreationSettings_SetPosition(Handle, &value);
+        }
+        public Quaternion Rotation
+        {
+            get { Quaternion result; JPH_BodyCreationSettings_GetRotation(Handle, &result); return result; }
+            set => JPH_BodyCreationSettings_SetRotation(Handle, &value);
+        }
+        public float Friction
+        {
+            get => JPH_BodyCreationSettings_GetFriction(Handle);
+            set => JPH_BodyCreationSettings_SetFriction(Handle, value);
+        }
+        public float Restitution
+        {
+            get => JPH_BodyCreationSettings_GetRestitution(Handle);
+            set => JPH_BodyCreationSettings_SetRestitution(Handle, value);
+        }
+    }
+}
+#else
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using static JoltPhysicsSharp.JoltApi;
@@ -291,3 +339,5 @@ public sealed unsafe class BodyCreationSettings : NativeObject
         }
     }
 }
+
+#endif

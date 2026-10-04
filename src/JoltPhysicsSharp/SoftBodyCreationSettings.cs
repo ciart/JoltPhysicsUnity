@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -148,3 +149,5 @@ public sealed class SoftBodyCreationSettings : NativeObject
         set => JPH_SoftBodyCreationSettings_SetFacesDoubleSided(Handle, value);
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Amer Koleci and Contributors.
+#if !UNITY_5_3_OR_NEWER
+// Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
 using System.Runtime.InteropServices;
@@ -51,3 +52,5 @@ public abstract class SimShapeFilter : NativeObject
             Body.GetObject(body2)!, Shape.GetObject(shape2)!, *subShapeIDOfShape2);
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if !UNITY_5_3_OR_NEWER
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
@@ -28,3 +29,5 @@ public sealed class TaperedCylinderShape : ConvexShape
     public float ConvexRadius => JPH_TaperedCylinderShape_GetConvexRadius(Handle);
     public float HalfHeight => JPH_TaperedCylinderShape_GetHalfHeight(Handle);
 }
+
+#endif

@@ -1,6 +1,113 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+namespace JoltPhysicsSharp
+{
+    public abstract class NativeObject : IDisposable
+    {
+        private IntPtr handle;
+        private bool registered;
+        private NativeObject owner;
+        public bool IsDisposed { get; private set; }
+        protected internal virtual bool OwnsHandle { get; protected set; } = true;
+        protected internal bool IgnorePublicDispose { get; set; }
+
+        protected NativeObject() { }
+        internal NativeObject(IntPtr handle, bool ownsHandle = true)
+        {
+            OwnsHandle = ownsHandle;
+            Handle = handle;
+            if (handle == IntPtr.Zero)
+                throw new InvalidOperationException("Native object creation returned a null handle.");
+        }
+        public IntPtr Handle
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return handle;
+            }
+            protected set
+            {
+                lock (Foundation.SyncRoot)
+                {
+                    if (handle != IntPtr.Zero || IsDisposed)
+                        throw new InvalidOperationException("A native handle cannot be replaced.");
+                    Foundation.RequireInitialized();
+                    if (value == IntPtr.Zero)
+                        throw new InvalidOperationException("Native object creation returned a null handle.");
+                    handle = value;
+                    if (OwnsHandle)
+                    {
+                        Foundation.LiveObjects++;
+                        registered = true;
+                    }
+                }
+            }
+        }
+        internal void ThrowIfDisposed()
+        {
+            if (IsDisposed || handle == IntPtr.Zero)
+                throw new ObjectDisposedException(GetType().Name);
+        }
+        internal void RequireTransferable()
+        {
+            ThrowIfDisposed();
+            if (owner != null || !OwnsHandle)
+                throw new InvalidOperationException("A collision filter cannot be shared between worlds.");
+        }
+        internal void TransferTo(NativeObject newOwner)
+        {
+            RequireTransferable();
+            owner = newOwner;
+            OwnsHandle = false;
+            IgnorePublicDispose = true;
+            Unregister();
+        }
+        internal void InvalidateFromOwner()
+        {
+            handle = IntPtr.Zero;
+            owner = null;
+            IgnorePublicDispose = false;
+            IsDisposed = true;
+            GC.SuppressFinalize(this);
+        }
+        public void Dispose()
+        {
+            lock (Foundation.SyncRoot)
+            {
+                if (IsDisposed || IgnorePublicDispose)
+                    return;
+                if (handle != IntPtr.Zero && OwnsHandle)
+                    DisposeNative();
+                DisposeManaged();
+                handle = IntPtr.Zero;
+                IsDisposed = true;
+                Unregister();
+                GC.SuppressFinalize(this);
+            }
+        }
+        private void Unregister()
+        {
+            if (registered)
+            {
+                Foundation.LiveObjects--;
+                registered = false;
+            }
+        }
+        protected virtual void DisposeNative() { }
+        protected virtual void DisposeManaged() { }
+        ~NativeObject()
+        {
+            try { Dispose(); }
+            catch (Exception exception) { Foundation.ReportCallbackException(exception); }
+        }
+    }
+}
+#else
 using System.Collections.Concurrent;
 
 namespace JoltPhysicsSharp;
@@ -177,3 +284,5 @@ public abstract class NativeObject : IDisposable
         return HandleDictionary.GetOrAddObject(handle, objectFactory);
     }
 }
+
+#endif

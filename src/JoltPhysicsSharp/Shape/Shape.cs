@@ -1,6 +1,52 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if UNITY_5_3_OR_NEWER
+#nullable disable
+using System;
+using UnityEngine;
+using static JoltPhysicsSharp.JoltApi;
+namespace JoltPhysicsSharp
+{
+    public abstract class ShapeSettings : NativeObject
+    {
+        protected ShapeSettings() { }
+        protected ShapeSettings(IntPtr handle) : base(handle) { }
+        protected override void DisposeNative() => JPH_ShapeSettings_Destroy(Handle);
+        public ulong UserData
+        {
+            get => JPH_ShapeSettings_GetUserData(Handle);
+            set => JPH_ShapeSettings_SetUserData(Handle, value);
+        }
+        public abstract Shape Create();
+    }
+    public class Shape : NativeObject
+    {
+        protected Shape() { }
+        internal Shape(IntPtr handle, bool owns = true) : base(handle, owns) { }
+        protected override void DisposeNative() => JPH_Shape_Destroy(Handle);
+        public ShapeType Type => JPH_Shape_GetType(Handle);
+        public ShapeSubType SubType => JPH_Shape_GetSubType(Handle);
+        public ulong UserData
+        {
+            get => JPH_Shape_GetUserData(Handle);
+            set => JPH_Shape_SetUserData(Handle, value);
+        }
+        public float InnerRadius => JPH_Shape_GetInnerRadius(Handle);
+        public float Volume => JPH_Shape_GetVolume(Handle);
+        public Vector3 CenterOfMass
+        {
+            get { JPH_Shape_GetCenterOfMass(Handle, out Vector3 result); return result; }
+        }
+        public BoundingBox LocalBounds
+        {
+            get { JPH_Shape_GetLocalBounds(Handle, out BoundingBox result); return result; }
+        }
+        public void GetCenterOfMass(out Vector3 result) => JPH_Shape_GetCenterOfMass(Handle, out result);
+        public void GetLocalBounds(out BoundingBox result) => JPH_Shape_GetLocalBounds(Handle, out result);
+    }
+}
+#else
 using System.Numerics;
 using System.Runtime.InteropServices;
 using static JoltPhysicsSharp.JoltApi;
@@ -239,3 +285,5 @@ public class Shape : NativeObject
         return GetOrAddObject(handle, h => new Shape(h, false));
     }
 }
+
+#endif

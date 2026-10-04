@@ -1,9 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable disable
+using System;
 using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 public sealed class ObjectLayerPairFilterTable : ObjectLayerPairFilter
 {
@@ -26,4 +29,6 @@ public sealed class ObjectLayerPairFilterTable : ObjectLayerPairFilter
     {
         JPH_ObjectLayerPairFilterTable_EnableCollision(Handle, layer1, layer2);
     }
+}
+
 }

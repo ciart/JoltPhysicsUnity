@@ -1,9 +1,12 @@
 // Copyright (c) Amer Koleci and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#nullable disable
+using System;
 using static JoltPhysicsSharp.JoltApi;
 
-namespace JoltPhysicsSharp;
+namespace JoltPhysicsSharp
+{
 
 public sealed class ObjectVsBroadPhaseLayerFilterTable : ObjectVsBroadPhaseLayerFilter
 {
@@ -13,4 +16,6 @@ public sealed class ObjectVsBroadPhaseLayerFilterTable : ObjectVsBroadPhaseLayer
         : base(JPH_ObjectVsBroadPhaseLayerFilterTable_Create(broadPhaseLayerInterface.Handle, numBroadPhaseLayers, objectLayerPairFilter.Handle, numObjectLayers))
     {
     }
+}
+
 }
