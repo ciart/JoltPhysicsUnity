@@ -9,6 +9,7 @@ The README must disclose that GPT (Codex) is used to write and modify the Unity 
 - Pin the baseline in `Unity~/upstream.json`. Preserve upstream Git history and the original `src/JoltPhysicsSharp` paths. Modify the original files directly; do not replace them with a subset copied from the previous standalone repository.
 - Commit each logical change separately unless the user explicitly requests consolidation. Do not create orphan history or reset upstream history. Rewriting published port commits requires explicit user authorization and a push protected by an explicit expected remote commit.
 - The public name is `JoltPhysicsUnity`, the UPM ID is `com.ciart.joltphysics`, and the C# namespace remains `JoltPhysicsSharp`. Update the repository URL only after verifying its actual rename.
+- Keep package.json at the repository root so the Git installation URL needs no path parameter. Preserve the original managed source paths independently of the package root.
 - Unity APIs use `UnityEngine.Vector3`, `Quaternion`, and where needed `Vector4` and `Matrix4x4`. Retain existing .NET paths through conditional compilation where practical. Review equality, normalization, defaults, matrix layout and rotation semantics explicitly.
 - Keep game sessions, Playfield, Piece, prefabs and automatic Update outside the package. Callers control stepping and scene synchronization.
 - Do not add comments that restate what the code already expresses. Record change rationale in the upstream change log. Preserve original copyright notices.

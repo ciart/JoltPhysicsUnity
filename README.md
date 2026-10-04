@@ -6,7 +6,7 @@ A Unity port of [JoltPhysicsSharp](https://github.com/amerkoleci/JoltPhysicsShar
 
 The intended runtime uses Unity math types and lets plain C# code own and step physics data. GameObjects, prefab creation and Transform synchronization remain the responsibility of the game. The C# namespace stays **JoltPhysicsSharp**; the UPM package ID is **com.ciart.joltphysics**.
 
-**Development package: runtime port incomplete.** A UPM manifest is available at `src/JoltPhysicsSharp/package.json`, version `0.1.0-preview.1`. The complete Unity assembly, native interop and Unity import are not yet verified. Adding the Git dependency does not yet provide a working physics runtime.
+**Development package: runtime port incomplete.** A UPM manifest is available at the repository root as `package.json`, version `0.1.0-preview.1`. The complete Unity assembly, native interop and Unity import are not yet verified. Adding the Git dependency does not yet provide a working physics runtime.
 
 ## Adding to Unity
 
@@ -20,24 +20,24 @@ The target is **Unity 6000.4.8f1**, **C# 9**, **.NET Standard 2.1**, and UnityEn
 The main-branch package URL is:
 
 ```text
-https://github.com/ciart/JoltPhysicsUnity.git?path=/src/JoltPhysicsSharp
+https://github.com/ciart/JoltPhysicsUnity.git
 ```
 
-To pin a specific development revision, append its commit after the package path. A future published Unity release can also be selected by tag:
+To pin a specific development revision, append its full commit hash to the repository URL. A future published Unity release can also be selected by tag:
 
 ```text
-https://github.com/ciart/JoltPhysicsUnity.git?path=/src/JoltPhysicsSharp#<tag-or-commit>
+https://github.com/ciart/JoltPhysicsUnity.git#<tag-or-full-commit-hash>
 ```
 
-Replace `<tag-or-commit>` with an existing revision that contains the package manifest. No complete Unity runtime release is available yet. The repository-root URL alone will not select the package subfolder.
+Replace `<tag-or-full-commit-hash>` with an existing revision that contains the root package manifest. No `?path=` parameter is needed. No complete Unity runtime release is available yet.
 
-Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4/Documentation/Manual/upm-ui-giturl.html) and [package paths and revisions](https://docs.unity3d.com/6000.4/Documentation/Manual/upm-git.html#paths-and-revisions) for the URL format.
+Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4/Documentation/Manual/upm-ui-giturl.html) and [Git revisions](https://docs.unity3d.com/6000.4/Documentation/Manual/upm-git.html#revision) for the URL format.
 
 ## Current implementation
 
 | Area | Verified in this fork |
 | --- | --- |
-| UPM metadata | Manifest, package README and MIT license at `src/JoltPhysicsSharp`; JSON checked, Unity import not yet verified |
+| UPM metadata | Manifest, README and MIT license at the repository root; JSON checked, Unity import not yet verified |
 | Source compatibility | 48 original foundational, enum, geometry and query-result files compile against C# 9 / .NET Standard 2.1 in Unity and .NET paths |
 | Math types | Unity types applied to the ported geometry and result types; full rotation and native matrix paths pending |
 | Structure layout | 22 type sizes and 29 field offsets match the pinned C header in a macOS arm64 inspection hosted on .NET 9 |
