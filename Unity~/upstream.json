@@ -12,7 +12,7 @@
     "repository": "https://github.com/ciart/JoltPhysicsUnity",
     "displayName": "JoltPhysicsUnity",
     "packageId": "com.ciart.joltphysics",
-    "packageVersion": "0.1.0-preview.1",
+    "packageVersion": "0.1.0-preview.2",
     "packagePath": ".",
     "namespace": "JoltPhysicsSharp",
     "editorBaseline": "6000.4.8f1",
@@ -32,7 +32,8 @@
       "floor collision and rest",
       "closest-hit raycast ID and fraction",
       "5 additional init/world/shutdown cycles"
-    ]
+    ],
+    "packageTag": "v0.1.0-preview.2"
   },
   "nativeReference": {
     "repository": "https://github.com/amerkoleci/joltc",
