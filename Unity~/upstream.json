@@ -54,6 +54,15 @@
         "macOS arm64 Editor"
       ],
       "buildOptions": "Not reconstructed; unchanged binary inherited from upstream."
-    }
+    },
+    "platformAudit": "Unity~/Documentation/NativePlatforms.json",
+    "enabledArtifacts": [
+      "native/osx/libjoltc.dylib",
+      "native/win-x64/joltc.dll",
+      "native/win-arm64/joltc.dll",
+      "native/linux-x64/libjoltc.so",
+      "native/android-arm64/libjoltc.so",
+      "native/android-x64/libjoltc.so"
+    ]
   }
 }

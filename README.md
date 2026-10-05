@@ -37,7 +37,7 @@ Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4
 
 | Area | Verified in this fork |
 | --- | --- |
-| UPM metadata | Root manifest, runtime asmdef, Unity-generated source metadata and macOS PluginImporter settings; embedded import verified |
+| UPM metadata | Root manifest, runtime asmdef, Unity-generated metadata and six OS/CPU-specific PluginImporter configurations; embedded import verified |
 | Source compatibility | 66 original files compile in the Unity runtime scope; 111 unported files are excluded from Unity, preserving their .NET source |
 | Math types | Unity geometry, box/body vectors and quaternions; initial position and yaw round trips pass; advanced native matrices pending |
 | Structure layout | 22 type sizes and 29 field offsets match the pinned C header in a macOS arm64 inspection hosted on .NET 9 |
@@ -47,6 +47,23 @@ Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4
 Native checks ran against this fork and its unchanged upstream macOS binary. Results from the previous standalone repository are not used as validation. Compound shapes, contact callbacks, custom query filters, complete body APIs, Windows, IL2CPP and performance remain outside the verified scope.
 
 See the [implementation requirements](Unity~/Documentation/Implementation.md), [changes from upstream](Unity~/Documentation/UpstreamChanges.md), and [pinned source baseline](Unity~/upstream.json) for scope and remaining work. The manifest starts at `0.1.0-preview.1`; its version will not be incremented for each implementation step.
+
+## Native platforms
+
+| Target | Native package configuration | Execution verified |
+| --- | --- | --- |
+| macOS arm64 / x64 | Universal single-precision library; Editor and player enabled | arm64 Editor only |
+| Windows x64 / ARM64 | Separate single-precision DLLs; matching Editor OS/CPU and player CPU enabled | No |
+| Linux x64 | Single-precision library; Linux Editor and player enabled | No |
+| Android ARM64 / x64 | Separate single-precision libraries; Android CPU selected; 16 KiB ELF load-segment alignment inspected | No |
+| Android ARMv7 | Upstream library retained and disabled; 32-bit ABI/runtime verification pending | No |
+| Linux ARM64 | Upstream library retained and disabled; separate Embedded Linux target configuration required | No |
+| Windows / Linux x86 | No upstream native artifact | No |
+| iOS / tvOS / visionOS | Native artifacts and static-link interop not prepared | No |
+| WebGL / WebGPU | WebAssembly artifact and browser interop not prepared | No |
+| UWP / consoles | Target-specific artifacts and integration not prepared | No |
+
+All eight upstream release artifacts retain their original bytes and export the 71 entry points used by the Unity runtime. Debug and double-precision libraries remain disabled. Enabling an importer does not establish target execution, IL2CPP support or CPU instruction requirements. See the [native audit](Unity~/Documentation/NativePlatforms.json) for hashes, source commits, dependencies and remaining gaps, and Unity's [plug-in settings](https://docs.unity3d.com/6000.4/Documentation/Manual/plug-in-inspector.html) for OS/CPU selection.
 
 ## Working on the port
 

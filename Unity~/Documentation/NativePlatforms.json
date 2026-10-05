@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "upstreamManagedCommit": "3ab66bf9e970b10c2b22b8f5b88dfdc2c765a7fb",
+  "unityEditor": "6000.4.8f1",
+  "requiredUnityNativeExports": [
+    "JPH_BodyCreationSettings_Create",
+    "JPH_BodyCreationSettings_Create2",
+    "JPH_BodyCreationSettings_Create3",
+    "JPH_BodyCreationSettings_Destroy",
+    "JPH_BodyCreationSettings_GetFriction",
+    "JPH_BodyCreationSettings_GetPosition",
+    "JPH_BodyCreationSettings_GetRestitution",
+    "JPH_BodyCreationSettings_GetRotation",
+    "JPH_BodyCreationSettings_SetFriction",
+    "JPH_BodyCreationSettings_SetPosition",
+    "JPH_BodyCreationSettings_SetRestitution",
+    "JPH_BodyCreationSettings_SetRotation",
+    "JPH_BodyInterface_CreateAndAddBody",
+    "JPH_BodyInterface_GetLinearVelocity",
+    "JPH_BodyInterface_GetPosition",
+    "JPH_BodyInterface_GetRotation",
+    "JPH_BodyInterface_IsActive",
+    "JPH_BodyInterface_IsAdded",
+    "JPH_BodyInterface_RemoveAndDestroyBody",
+    "JPH_BodyInterface_SetLinearVelocity",
+    "JPH_BodyInterface_SetPosition",
+    "JPH_BodyInterface_SetPositionAndRotation",
+    "JPH_BoxShapeSettings_Create",
+    "JPH_BoxShapeSettings_CreateShape",
+    "JPH_BoxShape_Create",
+    "JPH_BoxShape_GetConvexRadius",
+    "JPH_BoxShape_GetHalfExtent",
+    "JPH_BroadPhaseLayerInterfaceTable_Create",
+    "JPH_BroadPhaseLayerInterfaceTable_MapObjectToBroadPhaseLayer",
+    "JPH_BroadPhaseLayerInterface_Destroy",
+    "JPH_ConvexShapeSettings_GetDensity",
+    "JPH_ConvexShapeSettings_SetDensity",
+    "JPH_ConvexShape_GetDensity",
+    "JPH_ConvexShape_SetDensity",
+    "JPH_Init",
+    "JPH_JobSystemThreadPool_Create",
+    "JPH_JobSystem_Destroy",
+    "JPH_NarrowPhaseQuery_CastRay",
+    "JPH_ObjectLayerPairFilterTable_Create",
+    "JPH_ObjectLayerPairFilterTable_DisableCollision",
+    "JPH_ObjectLayerPairFilterTable_EnableCollision",
+    "JPH_ObjectLayerPairFilter_Destroy",
+    "JPH_ObjectVsBroadPhaseLayerFilterTable_Create",
+    "JPH_ObjectVsBroadPhaseLayerFilter_Destroy",
+    "JPH_PhysicsSystem_Create",
+    "JPH_PhysicsSystem_Destroy",
+    "JPH_PhysicsSystem_GetBodyInterface",
+    "JPH_PhysicsSystem_GetGravity",
+    "JPH_PhysicsSystem_GetMaxBodies",
+    "JPH_PhysicsSystem_GetNarrowPhaseQuery",
+    "JPH_PhysicsSystem_GetNumBodies",
+    "JPH_PhysicsSystem_OptimizeBroadPhase",
+    "JPH_PhysicsSystem_SetGravity",
+    "JPH_PhysicsSystem_Update2",
+    "JPH_SetAssertFailureHandler",
+    "JPH_SetTraceHandler",
+    "JPH_ShapeSettings_Destroy",
+    "JPH_ShapeSettings_GetUserData",
+    "JPH_ShapeSettings_SetUserData",
+    "JPH_Shape_Destroy",
+    "JPH_Shape_GetCenterOfMass",
+    "JPH_Shape_GetInnerRadius",
+    "JPH_Shape_GetLocalBounds",
+    "JPH_Shape_GetSubType",
+    "JPH_Shape_GetType",
+    "JPH_Shape_GetUserData",
+    "JPH_Shape_GetVolume",
+    "JPH_Shape_SetUserData",
+    "JPH_Shutdown",
+    "JPH_TempAllocatorMalloc_Create",
+    "JPH_TempAllocator_Destroy"
+  ],
+  "metadataVerification": "Unity PluginImporter APIs saved and read back all six enabled OS/CPU configurations. Existing GUIDs preserved.",
+  "artifacts": [
+    {
+      "path": "native/android-arm/libjoltc.so",
+      "bits": 32,
+      "machine": "0x28",
+      "sha256": "724bbbf8ad35558bbddd79dd1f7f2e0809dc714234129c8ba6d4c7054ae016b8",
+      "missingExports": [],
+      "dependencies": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "loadSegmentAlignment": [
+        16384,
+        16384,
+        16384
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": false,
+      "executionVerified": [],
+      "disabledReason": "32-bit ABI and runtime not verified."
+    },
+    {
+      "path": "native/android-arm64/libjoltc.so",
+      "bits": 64,
+      "machine": "0xb7",
+      "sha256": "00f52af8c1d6d72e35baffa0e55fe6f0f256c92f1befe7b7b66d6bcf07dd7c88",
+      "missingExports": [],
+      "dependencies": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "loadSegmentAlignment": [
+        16384,
+        16384,
+        16384
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [],
+      "unityImport": {
+        "target": "Android",
+        "cpu": "ARM64",
+        "editorOS": null
+      }
+    },
+    {
+      "path": "native/android-x64/libjoltc.so",
+      "bits": 64,
+      "machine": "0x3e",
+      "sha256": "23f791e2444d3c50932fce1596579df46d1de193285db37c7a6a766724c8d85e",
+      "missingExports": [],
+      "dependencies": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "loadSegmentAlignment": [
+        16384,
+        16384,
+        16384
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [],
+      "unityImport": {
+        "target": "Android",
+        "cpu": "x86_64",
+        "editorOS": null
+      }
+    },
+    {
+      "path": "native/linux-arm64/libjoltc.so",
+      "bits": 64,
+      "machine": "0xb7",
+      "sha256": "daf06442fdf25bd2fc4234c252e3862ca3a94e32792a4466a9d93723c8bb03cb",
+      "missingExports": [],
+      "dependencies": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-aarch64.so.1"
+      ],
+      "loadSegmentAlignment": [
+        65536,
+        65536
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": false,
+      "executionVerified": [],
+      "disabledReason": "Requires a separate Embedded Linux target configuration; standard desktop Linux targets x64."
+    },
+    {
+      "path": "native/linux-x64/libjoltc.so",
+      "bits": 64,
+      "machine": "0x3e",
+      "sha256": "3800cc6fff9e5470c524b15e8895599f90e9b96129b3f5cf9f76504beda178a3",
+      "missingExports": [],
+      "dependencies": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "loadSegmentAlignment": [
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [],
+      "unityImport": {
+        "target": "StandaloneLinux64",
+        "cpu": "x86_64",
+        "editorOS": "Linux"
+      }
+    },
+    {
+      "path": "native/osx/libjoltc.dylib",
+      "bits": 64,
+      "machine": [
+        "arm64",
+        "x86_64"
+      ],
+      "sha256": "386dbeec5e6892c218f9692572528ee3af748184c9298861c90aac1e3443c2ec",
+      "missingExportsByArchitecture": {
+        "arm64": [],
+        "x86_64": []
+      },
+      "dependencies": [
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+        "/System/Library/Frameworks/MetalKit.framework/Versions/A/MetalKit",
+        "/usr/lib/libSystem.B.dylib",
+        "/usr/lib/libc++.1.dylib"
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [
+        "macOS arm64 Editor"
+      ],
+      "unityImport": {
+        "target": "StandaloneOSX",
+        "cpu": "AnyCPU",
+        "editorOS": "OSX"
+      }
+    },
+    {
+      "path": "native/win-arm64/joltc.dll",
+      "bits": 64,
+      "machine": "0xaa64",
+      "sha256": "d32b29b9aadfd7887e4681302a766c5476a196c6ad77ff1f86473bbfb47325e0",
+      "missingExports": [],
+      "dependencies": [
+        "KERNEL32.dll"
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [],
+      "unityImport": {
+        "target": "StandaloneWindows64",
+        "cpu": "ARM64",
+        "editorOS": "Windows"
+      }
+    },
+    {
+      "path": "native/win-x64/joltc.dll",
+      "bits": 64,
+      "machine": "0x8664",
+      "sha256": "79125ab6882a1aeeecd5509bfe9edf383e8e48a34d9a8b642a6b9a197d44df74",
+      "missingExports": [],
+      "dependencies": [
+        "KERNEL32.dll"
+      ],
+      "unchangedFromUpstream": true,
+      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "buildOptions": "Not reconstructed; unchanged upstream binary.",
+      "unityImportEnabled": true,
+      "executionVerified": [],
+      "unityImport": {
+        "target": "StandaloneWindows64",
+        "cpu": "x86_64",
+        "editorOS": "Windows"
+      }
+    }
+  ],
+  "unavailableTargets": [
+    {
+      "targets": [
+        "Windows x86",
+        "Linux x86"
+      ],
+      "reason": "No upstream 32-bit desktop artifact; not configured."
+    },
+    {
+      "targets": [
+        "iOS",
+        "tvOS",
+        "visionOS"
+      ],
+      "reason": "No native Apple mobile artifact or static-link interop path prepared."
+    },
+    {
+      "targets": [
+        "WebGL",
+        "WebGPU"
+      ],
+      "reason": "No WebAssembly artifact or browser interop path prepared."
+    },
+    {
+      "targets": [
+        "UWP",
+        "consoles"
+      ],
+      "reason": "No target-specific artifacts, SDK integration or runtime verification prepared."
+    }
+  ],
+  "limits": "Export availability and importer settings do not establish ABI correctness, target execution, IL2CPP support, CPU instruction requirements, performance or determinism. Only macOS arm64 Editor native execution has been verified.",
+  "references": [
+    "https://docs.unity3d.com/6000.4/Documentation/Manual/plug-in-inspector.html",
+    "https://docs.unity3d.com/6000.4/Documentation/Manual/system-requirements.html",
+    "https://docs.unity3d.com/6000.4/Documentation/ScriptReference/Build.OSArchitecture.html"
+  ]
+}

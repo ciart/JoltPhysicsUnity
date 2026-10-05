@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -11,6 +12,16 @@ namespace JoltPortTools
     public static class GenerateImportMetadata
     {
         private const string PackageRoot = "Packages/com.ciart.joltphysics/";
+        private static readonly Dictionary<string, (BuildTarget Target, string Cpu, string EditorOS)> Platforms =
+            new Dictionary<string, (BuildTarget, string, string)>
+            {
+                { "native/osx/libjoltc.dylib", (BuildTarget.StandaloneOSX, "AnyCPU", "OSX") },
+                { "native/win-x64/joltc.dll", (BuildTarget.StandaloneWindows64, "x86_64", "Windows") },
+                { "native/win-arm64/joltc.dll", (BuildTarget.StandaloneWindows64, "ARM64", "Windows") },
+                { "native/linux-x64/libjoltc.so", (BuildTarget.StandaloneLinux64, "x86_64", "Linux") },
+                { "native/android-arm64/libjoltc.so", (BuildTarget.Android, "ARM64", null) },
+                { "native/android-x64/libjoltc.so", (BuildTarget.Android, "x86_64", null) }
+            };
 
         public static void Run()
         {
@@ -27,28 +38,45 @@ namespace JoltPortTools
             try
             {
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                int configured = 0;
                 foreach (string asset in AssetDatabase.GetAllAssetPaths().Where(assetPath => assetPath.StartsWith(PackageRoot + "native/", StringComparison.Ordinal)))
                 {
                     PluginImporter importer = AssetImporter.GetAtPath(asset) as PluginImporter;
                     if (importer == null)
                         continue;
-                    bool supported = asset == PackageRoot + "native/osx/libjoltc.dylib";
+                    bool supported = Platforms.TryGetValue(asset.Substring(PackageRoot.Length), out var configuration);
                     importer.SetCompatibleWithAnyPlatform(false);
-                    importer.SetCompatibleWithEditor(supported);
+                    importer.SetCompatibleWithEditor(supported && configuration.EditorOS != null);
                     foreach (BuildTarget target in new[] { BuildTarget.StandaloneOSX, BuildTarget.StandaloneWindows, BuildTarget.StandaloneWindows64, BuildTarget.StandaloneLinux64, BuildTarget.Android, BuildTarget.iOS, BuildTarget.WebGL, BuildTarget.WSAPlayer })
-                        importer.SetCompatibleWithPlatform(target, supported && target == BuildTarget.StandaloneOSX);
+                        importer.SetCompatibleWithPlatform(target, supported && target == configuration.Target);
                     if (supported)
                     {
-                        importer.SetEditorData("OS", "OSX");
-                        importer.SetEditorData("CPU", "AnyCPU");
-                        importer.SetPlatformData(BuildTarget.StandaloneOSX, "CPU", "AnyCPU");
+                        if (configuration.EditorOS != null)
+                        {
+                            importer.SetEditorData("OS", configuration.EditorOS);
+                            importer.SetEditorData("CPU", configuration.Cpu);
+                        }
+                        importer.SetPlatformData(configuration.Target, "CPU", configuration.Cpu);
                     }
                     importer.SaveAndReimport();
+                    if (supported)
+                    {
+                        if (!importer.GetCompatibleWithPlatform(configuration.Target) ||
+                            importer.GetPlatformData(configuration.Target, "CPU") != configuration.Cpu ||
+                            importer.GetCompatibleWithEditor() != (configuration.EditorOS != null) ||
+                            (configuration.EditorOS != null &&
+                                (importer.GetEditorData("OS") != configuration.EditorOS || importer.GetEditorData("CPU") != configuration.Cpu)))
+                            throw new InvalidOperationException("Plugin platform settings did not persist: " + asset);
+                        configured++;
+                        Debug.Log("[Jolt metadata] " + asset + ": " + configuration.Target + "/" + configuration.Cpu);
+                    }
                 }
                 AssetDatabase.SaveAssets();
                 if (!File.Exists(Path.Combine(path, "src/JoltPhysicsSharp/Foundation.cs.meta")))
                     throw new InvalidOperationException("Unity did not generate source metadata in the supplied checkout.");
-                Finish(0, "Unity generated import metadata and configured the single-precision macOS plugin in the writable checkout.");
+                if (configured != Platforms.Count)
+                    throw new InvalidOperationException("Not all configured native artifacts were imported.");
+                Finish(0, "Unity saved and checked OS/CPU settings for " + configured + " single-precision native plugins.");
             }
             catch (Exception exception)
             {
