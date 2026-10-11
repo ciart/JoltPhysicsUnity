@@ -1,0 +1,218 @@
+name: Native (cross-platform deterministic)
+
+on:
+  workflow_dispatch:
+
+env:
+  JOLTC_REPOSITORY: amerkoleci/joltc
+  JOLTC_COMMIT: 886e088675bae3a086f8318c7803f8ee962c2f2c
+  JOLTC_OPTIONS: >-
+    -DCMAKE_BUILD_TYPE=Distribution
+    -DCROSS_PLATFORM_DETERMINISTIC=ON
+    -DJPH_SAMPLES=OFF
+    -DJPH_TESTS=OFF
+
+jobs:
+  build:
+    name: ${{ matrix.rid }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: win-x64
+            os: windows-latest
+            configure: -A x64
+            library: bin/Distribution/joltc.dll
+            import: lib/Distribution/joltc.lib
+            probe: true
+          - rid: win-arm64
+            os: windows-11-arm
+            configure: -A ARM64
+            library: bin/Distribution/joltc.dll
+            import: lib/Distribution/joltc.lib
+            probe: true
+          - rid: linux-x64
+            os: ubuntu-22.04
+            configure: -G Ninja
+            library: lib/libjoltc.so
+            probe: true
+          - rid: linux-arm64
+            os: ubuntu-22.04-arm
+            configure: -G Ninja
+            library: lib/libjoltc.so
+            probe: true
+          - rid: osx
+            os: macos-latest
+            configure: -G Ninja "-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11
+            library: lib/libjoltc.dylib
+            probe: true
+          - rid: android-arm64
+            os: ubuntu-22.04
+            android-abi: arm64-v8a
+            library: lib/libjoltc.so
+            probe: false
+          - rid: android-x64
+            os: ubuntu-22.04
+            android-abi: x86_64
+            library: lib/libjoltc.so
+            probe: false
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.JOLTC_REPOSITORY }}
+          ref: ${{ env.JOLTC_COMMIT }}
+          path: joltc
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Set up Android NDK
+        if: matrix.android-abi
+        id: ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r25
+          add-to-path: false
+
+      - name: Configure joltc
+        run: |
+          if [ -n "${{ matrix.android-abi }}" ]; then
+            extra="-G Ninja -DANDROID_ABI=${{ matrix.android-abi }} -DANDROID_NDK=${{ steps.ndk.outputs.ndk-path }} -DCMAKE_TOOLCHAIN_FILE=${{ steps.ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384"
+          else
+            extra='${{ matrix.configure }}'
+          fi
+          eval cmake -S joltc -B build $JOLTC_OPTIONS $extra
+
+      - name: Build joltc
+        run: cmake --build build --config Distribution --parallel
+
+      - name: Stage library
+        run: |
+          mkdir -p out/${{ matrix.rid }}
+          cp build/${{ matrix.library }} out/${{ matrix.rid }}/
+
+      - name: Build probe
+        if: matrix.probe
+        run: |
+          library='${{ matrix.import || matrix.library }}'
+          extra=''
+          if [ '${{ matrix.rid }}' = osx ]; then extra='-G Ninja "-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64"'; fi
+          if [ '${{ matrix.rid }}' = win-arm64 ]; then extra='-A ARM64'; fi
+          if [ '${{ matrix.rid }}' = win-x64 ]; then extra='-A x64'; fi
+          eval cmake -S Unity~/Tools/DeterminismCheck -B probe $extra \
+            "-DJOLTC_INCLUDE_DIR=$PWD/joltc/include" "-DJOLTC_LIBRARY=$PWD/build/$library"
+          cmake --build probe --config Release
+
+      - name: Run probe
+        if: matrix.probe
+        run: |
+          mkdir -p probe-results
+          case '${{ matrix.rid }}' in
+            win-*)
+              cp build/${{ matrix.library }} probe/Release/
+              probe/Release/determinism_check.exe > probe-results/${{ matrix.rid }}.txt
+              ;;
+            osx)
+              probe/determinism_check > probe-results/osx-arm64.txt
+              arch -x86_64 probe/determinism_check > probe-results/osx-x86_64.txt
+              ;;
+            *)
+              probe/determinism_check > probe-results/${{ matrix.rid }}.txt
+              ;;
+          esac
+          tail -n 2 probe-results/*.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: out
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.probe
+        with:
+          name: probe-${{ matrix.rid }}
+          path: probe-results
+
+  verify:
+    needs: build
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: native-*
+          path: native
+          merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: probe-*
+          path: probe-results
+          merge-multiple: true
+
+      - name: Install LLVM tools
+        run: sudo apt-get update && sudo apt-get install -y llvm
+
+      - name: Compare probe output
+        run: |
+          set -e
+          reference=probe-results/linux-x64.txt
+          status=0
+          for file in probe-results/*.txt; do
+            if cmp -s "$reference" "$file"; then
+              echo "match    $(basename "$file" .txt) $(tail -n 1 "$file")"
+            else
+              echo "MISMATCH $(basename "$file" .txt) $(tail -n 1 "$file")"
+              status=1
+            fi
+          done
+          exit $status
+
+      - name: Scan for fused multiply-add instructions
+        run: |
+          set -e
+          pattern='[[:space:]](v?fn?m(add|sub)[0-9a-z]*|fmla|fmls)[[:space:]]'
+          status=0
+          for library in $(find native -type f | sort); do
+            count=$(llvm-objdump -d --no-show-raw-insn "$library" | grep -cE "$pattern" || true)
+            echo "$count $library"
+            if [ "$count" != 0 ]; then status=1; fi
+          done
+          exit $status
+
+      - name: Summarize
+        run: |
+          {
+            echo "joltc: $JOLTC_REPOSITORY@$JOLTC_COMMIT"
+            echo "options: $JOLTC_OPTIONS"
+            echo
+            echo "sha256:"
+            (cd native && find . -type f | sort | xargs sha256sum)
+            echo
+            echo "probe:"
+            for file in probe-results/*.txt; do echo "$(basename "$file" .txt) $(tail -n 1 "$file")"; done
+            echo
+            echo "dependencies:"
+            for library in $(find native -type f | sort); do
+              echo "$library"
+              llvm-objdump -p "$library" | grep -E "DLL Name|NEEDED|cmd LC_LOAD_DYLIB" -A2 | grep -E "DLL Name|NEEDED|name " | sed 's/^/  /' || true
+            done
+          } | tee summary.txt
+          cat summary.txt >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-deterministic
+          path: |
+            native
+            probe-results
+            summary.txt

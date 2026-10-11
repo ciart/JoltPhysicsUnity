@@ -59,3 +59,9 @@ python3 'Unity~/Tools/compile-scope.py' --unity-editor '<Unity Editor root>' --d
 Unity 6000.4.8f1 saves and reads back six configurations: universal macOS; Windows x64 and ARM64; Linux x64; Android ARM64 and x64. Editor settings select an explicit OS and CPU; player settings select a target and matching CPU. Android and Linux libraries sharing the same filename are kept on distinct targets. All native GUIDs remain unchanged; debug and double-precision artifacts remain disabled.
 
 Android ARMv7 remains disabled pending 32-bit ABI/runtime verification. Linux ARM64 remains disabled pending its separate Embedded Linux configuration. Windows/Linux x86, Apple mobile, Web, UWP and consoles lack the required target-specific artifacts or interop integration. No target execution, IL2CPP build, binary rebuild or performance test was performed in this audit. The host project and its package dependency were not changed.
+
+## Cross-platform determinism (2026-10-11)
+
+The inherited upstream artifacts are not built with `CROSS_PLATFORM_DETERMINISTIC` and contain fused multiply-add instructions on macOS arm64, Windows x64 and Windows ARM64. `.github/workflows/native.yml` rebuilds joltc at the pinned commit with that option and compares the output of `Unity~/Tools/DeterminismCheck` across desktop targets.
+
+Locally, a deterministic universal macOS build produced identical probe output on arm64 and Rosetta x86_64, while the inherited artifact diverged between the two slices. The workflow has not run yet and no native artifact has been replaced.
