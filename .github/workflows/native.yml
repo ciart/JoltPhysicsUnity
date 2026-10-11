@@ -93,6 +93,16 @@ jobs:
       - name: Build joltc
         run: cmake --build build --config Distribution --parallel
 
+      - name: Strip ELF library
+        if: startsWith(matrix.rid, 'linux-') || startsWith(matrix.rid, 'android-')
+        run: |
+          if [ -n "${{ matrix.android-abi }}" ]; then
+            strip_tool="${{ steps.ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip"
+          else
+            strip_tool=strip
+          fi
+          "$strip_tool" --strip-unneeded build/${{ matrix.library }}
+
       - name: Stage library
         run: |
           mkdir -p out/${{ matrix.rid }}

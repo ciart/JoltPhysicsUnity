@@ -136,3 +136,11 @@ Baseline: JoltPhysicsSharp 2.22.0, `3ab66bf9e970b10c2b22b8f5b88dfdc2c765a7fb`.
 - Reason: the second run (38114935478) produced identical probe output on all six desktop targets (final `7d0c480bb3913078`, including the ClangCL win-arm64 build). The FMA scan found zero instructions in every non-Windows library, zero single-precision forms in win-x64 and one single-precision scalar `fnmadd` in win-arm64. That instance lies in the jump table that follows the statically linked MSVC `memset` (`dup v0.16b, w1`, table dispatch through `br x8`); the bytes are table data misdecoded as an instruction. The 15 double-precision scalar forms in win-arm64 are also in the statically linked runtime at the end of `.text`.
 - Workflow: Windows libraries may contain up to 8 single-precision or vector forms; non-Windows libraries must contain none. The limit still rejects the MSVC ARM64 build (2957) and the inherited win-x64 artifact (8022).
 - Limits: the Windows allowance is a heuristic for code without symbols; cross-platform probe agreement remains the deciding check.
+
+## UNITY-016 — Strip rebuilt ELF libraries (2026-10-11)
+
+- Original: `.github/workflows/native.yml` from UNITY-015.
+- Changed: `.github/workflows/native.yml` and this log.
+- Reason: the third run (38115168622) passed every check: identical probe output on all six desktop targets (final `7d0c480bb3913078`) and an accepted FMA scan. Its exports (1261 symbols per library), Windows dependencies (`KERNEL32.dll` only), Linux glibc requirement (2.34) and Android 16 KiB load-segment alignment match the inherited artifacts. However, its Linux and Android libraries kept symbols and debug information (Android arm64 31 MB versus 2.5 MB), while the inherited ELF artifacts are stripped. The inherited macOS artifact is not stripped, so macOS is unchanged.
+- Workflow: strip Linux libraries with `strip --strip-unneeded` and Android libraries with the NDK `llvm-strip --strip-unneeded` before staging and before the probe runs, so the probe exercises the distributed bytes.
+- Limits: no native artifact is replaced in this change.
