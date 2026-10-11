@@ -44,7 +44,7 @@ Refer to Unity's [Git installation instructions](https://docs.unity3d.com/6000.4
 | Unity runtime assembly | Enabled box-runtime assembly and embedded package import verified; full API port incomplete |
 | Native execution | Actual Editor box/floor simulation, closest-hit raycast and 5 repeated cleanup cycles pass; player builds remain unverified |
 
-Native checks ran against this fork and its unchanged upstream macOS binary. Results from the previous standalone repository are not used as validation. Compound shapes, contact callbacks, custom query filters, complete body APIs, Windows, IL2CPP and performance remain outside the verified scope.
+Native checks ran against this fork and its previous, unchanged upstream macOS binary; the rebuilt deterministic binary has the same exports but has not yet been run in the Editor. Results from the previous standalone repository are not used as validation. Compound shapes, contact callbacks, custom query filters, complete body APIs, Windows, IL2CPP and performance remain outside the verified scope.
 
 See the [implementation requirements](Unity~/Documentation/Implementation.md), [changes from upstream](Unity~/Documentation/UpstreamChanges.md), and [pinned source baseline](Unity~/upstream.json) for scope and remaining work. The manifest starts at `0.1.0-preview.1`; its version will not be incremented for each implementation step.
 
@@ -63,7 +63,7 @@ See the [implementation requirements](Unity~/Documentation/Implementation.md), [
 | WebGL / WebGPU | WebAssembly artifact and browser interop not prepared | No |
 | UWP / consoles | Target-specific artifacts and integration not prepared | No |
 
-All eight upstream release artifacts retain their original bytes and export the 71 entry points used by the Unity runtime. Debug and double-precision libraries remain disabled. Enabling an importer does not establish target execution, IL2CPP support or CPU instruction requirements. See the [native audit](Unity~/Documentation/NativePlatforms.json) for hashes, source commits, dependencies and remaining gaps, and Unity's [plug-in settings](https://docs.unity3d.com/6000.4/Documentation/Manual/plug-in-inspector.html) for OS/CPU selection.
+The seven 64-bit single-precision release libraries are rebuilt from the pinned joltc commit with `CROSS_PLATFORM_DETERMINISTIC=ON` by the [native workflow](.github/workflows/native.yml). Outside Unity, a physics probe produces bit-identical results on Windows x64/ARM64, Linux x64/ARM64 and macOS arm64/x86_64; Android libraries are built but not executed. Each library exports the same 1261 entry points as the upstream artifact it replaces. Android ARMv7, debug and double-precision libraries remain unchanged upstream binaries and are disabled. Enabling an importer does not establish target execution, IL2CPP support or CPU instruction requirements. See the [native audit](Unity~/Documentation/NativePlatforms.json) for hashes, source commits, dependencies and remaining gaps, and Unity's [plug-in settings](https://docs.unity3d.com/6000.4/Documentation/Manual/plug-in-inspector.html) for OS/CPU selection.
 
 ## Working on the port
 

@@ -42,19 +42,17 @@
     "headerSha256": "5b6e2ca74170bb0c7760463e965f9958691a15bbf7b80ffd005886c9895759a7",
     "dependencyVersion": "1.1.0",
     "engineVersion": "5.6.0",
-    "artifactsAddedInThisFork": false,
+    "artifactsAddedInThisFork": true,
     "enabledArtifact": {
       "path": "native/osx/libjoltc.dylib",
-      "sha256": "386dbeec5e6892c218f9692572528ee3af748184c9298861c90aac1e3443c2ec",
-      "upstreamArtifactCommit": "59f7d63ff7760981b771b6b161346fcc007f4dfd",
+      "sha256": "514f55a7a7b2ede70962d053fcf304e5706da4bef9bac5425973a19e5540deb6",
       "architectures": [
         "x86_64",
         "arm64"
       ],
-      "executionVerified": [
-        "macOS arm64 Editor"
-      ],
-      "buildOptions": "Not reconstructed; unchanged binary inherited from upstream."
+      "executionVerified": [],
+      "buildOptions": "joltc 886e088675bae3a086f8318c7803f8ee962c2f2c (Jolt v5.6.0), single precision, CMake -DCMAKE_BUILD_TYPE=Distribution -DCROSS_PLATFORM_DETERMINISTIC=ON -DJPH_SAMPLES=OFF -DJPH_TESTS=OFF; built by .github/workflows/native.yml run 38117592810.",
+      "buildWorkflowRun": "38117592810"
     },
     "platformAudit": "Unity~/Documentation/NativePlatforms.json",
     "enabledArtifacts": [
