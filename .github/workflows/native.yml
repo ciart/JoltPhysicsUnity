@@ -91,7 +91,7 @@ jobs:
           case '${{ matrix.rid }}' in
             # Emit a PDB for attributing instructions; keep the release linker optimizations
             # that /DEBUG would otherwise disable, and avoid embedding the build path.
-            win-*) extra="$extra '-DCMAKE_SHARED_LINKER_FLAGS=/DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO /PDBALTPATH:%_PDB%'" ;;
+            win-*) extra="$extra '-DCMAKE_SHARED_LINKER_FLAGS=/DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO /PDBALTPATH:joltc.pdb'" ;;
           esac
           eval cmake -S joltc -B build $JOLTC_OPTIONS $extra
 
@@ -211,6 +211,16 @@ jobs:
         with:
           pattern: pdb-*
           path: pdb
+
+      - name: Check embedded PDB names
+        run: |
+          status=0
+          for library in native/win-*/joltc.dll; do
+            name=$(python3 -c 'import sys; d=open(sys.argv[1],"rb").read(); i=d.find(b"RSDS"); print(d[i+24:d.find(b"\0",i+24)].decode() if i>=0 else "")' "$library")
+            echo "$library: $name"
+            if [ "$name" != joltc.pdb ]; then status=1; fi
+          done
+          exit $status
 
       - name: Scan for fused multiply-add instructions
         run: |
