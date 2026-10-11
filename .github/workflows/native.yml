@@ -191,8 +191,14 @@ jobs:
             listing=$(llvm-objdump -d --no-show-raw-insn "$library")
             singles=$(grep -cE "$single" <<< "$listing" || true)
             doubles=$(grep -cE "$double" <<< "$listing" || true)
-            echo "single/vector $singles double $doubles $library"
-            if [ "$singles" != 0 ]; then status=1; fi
+            # Statically linked MSVC runtime code and jump-table data decoded as instructions
+            # appear in Windows libraries; allow a few, still catching compiler-generated FMA.
+            case "$library" in
+              */win-*) limit=8 ;;
+              *) limit=0 ;;
+            esac
+            echo "single/vector $singles (limit $limit) double $doubles $library"
+            if [ "$singles" -gt "$limit" ]; then status=1; fi
           done
           exit $status
 
