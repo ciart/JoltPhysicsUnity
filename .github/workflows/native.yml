@@ -28,7 +28,7 @@ jobs:
             probe: true
           - rid: win-arm64
             os: windows-11-arm
-            configure: -A ARM64
+            configure: -A ARM64 -T ClangCL "-DCMAKE_CXX_FLAGS=/clang:-ffp-contract=off" "-DCMAKE_C_FLAGS=/clang:-ffp-contract=off"
             library: bin/Distribution/joltc.dll
             import: lib/Distribution/joltc.lib
             probe: true
@@ -63,9 +63,9 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: ${{ env.JOLTC_REPOSITORY }}
           ref: ${{ env.JOLTC_COMMIT }}
@@ -165,6 +165,7 @@ jobs:
       - name: Compare probe output
         run: |
           set -e
+          for file in probe-results/*.txt; do tr -d '\r' < "$file" > "$file.lf" && mv "$file.lf" "$file"; done
           reference=probe-results/linux-x64.txt
           status=0
           for file in probe-results/*.txt; do
@@ -180,12 +181,18 @@ jobs:
       - name: Scan for fused multiply-add instructions
         run: |
           set -e
-          pattern='[[:space:]](v?fn?m(add|sub)[0-9a-z]*|fmla|fmls)[[:space:]]'
+          # Single-precision scalar and all vector forms can come from Jolt and fail the check.
+          # Double-precision scalar forms are reported only: this single-precision build has no
+          # double-precision simulation path, and on Windows they come from the static C runtime.
+          single='[[:space:]](vfn?m(add|sub)[0-9]+(ps|ss)|fmla|fmls|fn?m(add|sub)[[:space:]]+s[0-9]+)[[:space:],]'
+          double='[[:space:]](vfn?m(add|sub)[0-9]+(pd|sd)|fn?m(add|sub)[[:space:]]+d[0-9]+)[[:space:],]'
           status=0
           for library in $(find native -type f | sort); do
-            count=$(llvm-objdump -d --no-show-raw-insn "$library" | grep -cE "$pattern" || true)
-            echo "$count $library"
-            if [ "$count" != 0 ]; then status=1; fi
+            listing=$(llvm-objdump -d --no-show-raw-insn "$library")
+            singles=$(grep -cE "$single" <<< "$listing" || true)
+            doubles=$(grep -cE "$double" <<< "$listing" || true)
+            echo "single/vector $singles double $doubles $library"
+            if [ "$singles" != 0 ]; then status=1; fi
           done
           exit $status
 
