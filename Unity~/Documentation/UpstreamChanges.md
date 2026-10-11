@@ -170,3 +170,11 @@ Baseline: JoltPhysicsSharp 2.22.0, `3ab66bf9e970b10c2b22b8f5b88dfdc2c765a7fb`.
 - API/ABI impact: none expected. Every replaced library exports the same 1261 symbols as the library it replaces, including the 71 Unity runtime entry points. Windows libraries depend only on `KERNEL32.dll` and name `joltc.pdb` in their CodeView entry; Linux x64 still requires glibc 2.34; Android load segments keep 16 KiB alignment; ELF libraries are stripped as before. The macOS minimum version is 11.0 instead of 26.0. Behavior changes by design: deterministic mode disables FMA, which Jolt documents as roughly 8% slower.
 - Verification: run 38117592810 produced identical probe output on win-x64, win-arm64, linux-x64, linux-arm64, macOS arm64 and macOS x86_64 (final `7d0c480bb3913078`), embedded `joltc.pdb` in both Windows libraries and passed the attributed FMA scan with the same runtime-only findings as UNITY-017. Exports, dependencies and stripping were rechecked locally on the downloaded artifacts.
 - Limits: Unity Editor and player execution of the rebuilt libraries, IL2CPP and Android device execution have not been verified. Windows libraries are not byte-reproducible between runs; the recorded hashes identify the committed bytes.
+
+## UNITY-020 — Publish preview 3 (2026-10-11)
+
+- Original: root package.json and README, Implementation.md and upstream.json after UNITY-019.
+- Changed: bump the requested preview from 0.1.0-preview.2 to 0.1.0-preview.3, record its v0.1.0-preview.3 Git tag and document the exact tagged installation URL.
+- Reason: the user requested a preview release containing the cross-platform deterministic native libraries from UNITY-019.
+- Impact: manifest and documentation only. No managed source, API, ABI, native binary, importer setting or workflow change in this commit.
+- Verification: parse manifest and provenance JSON, confirm matching package ID, version and installation tag, check English-only content and the diff. The limits recorded in UNITY-019 apply: the rebuilt libraries have not yet been executed in the Unity Editor or a player.

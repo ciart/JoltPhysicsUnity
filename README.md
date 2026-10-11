@@ -6,7 +6,7 @@ A Unity port of [JoltPhysicsSharp](https://github.com/amerkoleci/JoltPhysicsShar
 
 The intended runtime uses Unity math types and lets plain C# code own and step physics data. GameObjects, prefab creation and Transform synchronization remain the responsibility of the game. The C# namespace stays **JoltPhysicsSharp**; the UPM package ID is **com.ciart.joltphysics**.
 
-**Development package: limited box runtime verified on macOS arm64 Editor.** Current preview: `0.1.0-preview.2`. The original files now provide initialization, box shapes, basic body creation/pose/velocity access, fixed stepping and closest-hit raycasts. The complete JoltPhysicsSharp API is still being ported; unsupported Unity sources are excluded from compilation.
+**Development package: limited box runtime verified on macOS arm64 Editor.** Current preview: `0.1.0-preview.3`, with cross-platform deterministic native libraries. The original files now provide initialization, box shapes, basic body creation/pose/velocity access, fixed stepping and closest-hit raycasts. The complete JoltPhysicsSharp API is still being ported; unsupported Unity sources are excluded from compilation.
 
 ## Adding to Unity
 
@@ -26,7 +26,7 @@ https://github.com/ciart/JoltPhysicsUnity.git
 To install this preview explicitly, use its version tag:
 
 ```text
-https://github.com/ciart/JoltPhysicsUnity.git#v0.1.0-preview.2
+https://github.com/ciart/JoltPhysicsUnity.git#v0.1.0-preview.3
 ```
 
 A full commit hash can also be used after `#` to pin a development revision. No `?path=` parameter is needed. This preview provides the limited API described below; the complete Unity runtime port remains unfinished.
