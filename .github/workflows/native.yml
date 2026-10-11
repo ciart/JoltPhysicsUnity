@@ -88,6 +88,11 @@ jobs:
           else
             extra='${{ matrix.configure }}'
           fi
+          case '${{ matrix.rid }}' in
+            # Emit a PDB for attributing instructions; keep the release linker optimizations
+            # that /DEBUG would otherwise disable, and avoid embedding the build path.
+            win-*) extra="$extra '-DCMAKE_SHARED_LINKER_FLAGS=/DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO /PDBALTPATH:%_PDB%'" ;;
+          esac
           eval cmake -S joltc -B build $JOLTC_OPTIONS $extra
 
       - name: Build joltc
@@ -145,6 +150,12 @@ jobs:
           path: out
 
       - uses: actions/upload-artifact@v4
+        if: startsWith(matrix.rid, 'win-')
+        with:
+          name: pdb-${{ matrix.rid }}
+          path: build/bin/Distribution/joltc.pdb
+
+      - uses: actions/upload-artifact@v4
         if: matrix.probe
         with:
           name: probe-${{ matrix.rid }}
@@ -170,7 +181,9 @@ jobs:
           merge-multiple: true
 
       - name: Install LLVM tools
-        run: sudo apt-get update && sudo apt-get install -y llvm
+        run: |
+          sudo apt-get update && sudo apt-get install -y llvm
+          dirname "$(readlink -f "$(command -v llvm-objdump)")" >> "$GITHUB_PATH"
 
       - name: Compare probe output
         run: |
@@ -188,31 +201,30 @@ jobs:
           done
           exit $status
 
+      - uses: actions/checkout@v6
+        with:
+          path: source
+          sparse-checkout: Unity~/Tools/DeterminismCheck
+
+      - name: Download PDBs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: pdb-*
+          path: pdb
+
       - name: Scan for fused multiply-add instructions
         run: |
-          set -e
-          # Single-precision scalar and all vector forms can come from Jolt and fail the check.
-          # Double-precision scalar forms are reported only: this single-precision build has no
-          # double-precision simulation path, and on Windows they come from the static C runtime.
-          single='[[:space:]](vfn?m(add|sub)[0-9]+(ps|ss)|fmla|fmls|fn?m(add|sub)[[:space:]]+s[0-9]+)[[:space:],]'
-          double='[[:space:]](vfn?m(add|sub)[0-9]+(pd|sd)|fn?m(add|sub)[[:space:]]+d[0-9]+)[[:space:],]'
           status=0
           for library in $(find native -type f | sort); do
-            listing=$(llvm-objdump -d --no-show-raw-insn "$library")
-            singles=$(grep -cE "$single" <<< "$listing" || true)
-            doubles=$(grep -cE "$double" <<< "$listing" || true)
-            # Statically linked MSVC runtime code and jump-table data decoded as instructions
-            # appear in Windows libraries; allow a few, still catching compiler-generated FMA.
-            case "$library" in
-              */win-*) limit=8 ;;
-              *) limit=0 ;;
-            esac
-            echo "single/vector $singles (limit $limit) double $doubles $library"
-            if [ "$singles" -gt "$limit" ]; then status=1; fi
+            rid=$(basename "$(dirname "$library")")
+            pdb_args=()
+            if [ -f "pdb/pdb-$rid/joltc.pdb" ]; then pdb_args=(--pdb "pdb/pdb-$rid/joltc.pdb"); fi
+            python3 source/Unity~/Tools/DeterminismCheck/fma_scan.py "$library" "${pdb_args[@]}" | tee -a fma-scan.txt || status=1
           done
           exit $status
 
       - name: Summarize
+        if: always()
         run: |
           {
             echo "joltc: $JOLTC_REPOSITORY@$JOLTC_COMMIT"
@@ -233,9 +245,11 @@ jobs:
           cat summary.txt >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: native-deterministic
           path: |
             native
             probe-results
             summary.txt
+            fma-scan.txt
